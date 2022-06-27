@@ -1,0 +1,2 @@
+# JSGMod
+Stargate mod
