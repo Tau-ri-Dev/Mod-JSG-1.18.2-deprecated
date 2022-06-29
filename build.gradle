@@ -1,0 +1,8 @@
+plugins {
+    id 'eclipse'
+    id 'maven-publish'
+}
+
+subprojects {
+    plugins.apply('maven-publish')
+}

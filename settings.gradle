@@ -1,2 +1,8 @@
-include 'Core'
+pluginManagement {
+    repositories {
+        maven { url "https://maven.minecraftforge.net/" }
+    }
+}
 
+rootProject.name = 'JSG'
+include 'Core'
