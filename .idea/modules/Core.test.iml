@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="FacetManager">
+    <facet type="minecraft" name="Minecraft">
+      <configuration>
+        <autoDetectTypes>
+          <platformType>MCP</platformType>
+        </autoDetectTypes>
+      </configuration>
+    </facet>
+  </component>
+  <component name="McpModuleSettings">
+    <option name="mappingFile" value="F:\Java\Projekty\JSGMod\Core\build\createMcpToSrg\output.tsrg" />
+    <option name="mcpVersion" value="official_1.19" />
+    <option name="minecraftVersion" value="1.19" />
+    <option name="srgType" value="TSRG" />
+  </component>
+</module>
