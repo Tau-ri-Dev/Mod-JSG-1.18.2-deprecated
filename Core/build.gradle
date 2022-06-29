@@ -150,7 +150,7 @@ jar {
         attributes([
                 "Specification-Title"     : "jsgcore",
                 "Specification-Vendor"    : "jsgcoresareus",
-                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Specification-Version"   : "1",
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
                 "Implementation-Vendor"   : "jsgcoresareus",
@@ -178,12 +178,35 @@ publishing {
     }
 }
 
+processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", mod_version
+    inputs.property "mcversion", mc_version
+    inputs.property "authors", authors
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mods.toml'
+
+        // replace version and mcversion and authors
+        expand 'version': mod_version, 'mcversion': mc_version, 'authors': authors
+
+        exclude 'mods.toml'
+    }
+
+    //rename '(.+_at.cfg)', 'META-INF/$1'
+}
+
 task replaceTokens(type: Sync) {
     from sourceSets.main.java
-    inputs.property 'version', project.mc_version.toString()
-    filter(ReplaceTokens, tokens: [VERSION: version.toString()])
+    //inputs.property 'version', project.mc_version.toString()
+    filter(ReplaceTokens, tokens: [VERSION: "${project.mod_version}".toString()])
     filter(ReplaceTokens, tokens: [MCVERSION: "${project.mc_version}".toString()])
+    filter(ReplaceTokens, tokens: [AUTHORS: "${project.authors}".toString()])
     into "$buildDir/src"
+}
+compileJava {
+    source = replaceTokens.outputs
 }
 
 tasks.withType(JavaCompile).configureEach {
