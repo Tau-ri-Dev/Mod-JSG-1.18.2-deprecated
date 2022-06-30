@@ -2,17 +2,17 @@ package dev.tauri.jsgmilkyway;
 
 import com.mojang.logging.LogUtils;
 import dev.tauri.jsgcore.JSGCore;
+import dev.tauri.jsgcore.config.files.JSGServerConfig;
 import dev.tauri.jsgmilkyway.commands.MWCommand;
+import dev.tauri.jsgmilkyway.config.MainConfig;
 import dev.tauri.jsgmilkyway.utils.Logging;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
 import static dev.tauri.jsgmilkyway.utils.corenetwork.CoreChecker.isCoreInstalled;
@@ -31,19 +31,16 @@ public class JSGMilkyWay {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public JSGMilkyWay() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
-        if(!isCoreInstalled()){
+        if (!isCoreInstalled()) {
             Logging.error("Error while loading!");
             Logging.error("Missing: JSG: Core mod!");
             Minecraft.getInstance().close();
             return;
         }
 
+        JSGServerConfig.configs.add(new MainConfig());
 
         MinecraftForge.EVENT_BUS.register(this);
-    }
-
-    private void commonSetup(final FMLCommonSetupEvent event) {
     }
 
     @SubscribeEvent
@@ -51,7 +48,7 @@ public class JSGMilkyWay {
     }
 
     @SubscribeEvent
-    public void onCommandsRegister(RegisterCommandsEvent event){
+    public void onCommandsRegister(RegisterCommandsEvent event) {
         JSGCore.getCommandRegistry().registerCommand(new MWCommand());
     }
 

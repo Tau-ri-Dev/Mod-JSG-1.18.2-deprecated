@@ -1,8 +1,7 @@
-package dev.tauri.jsgcore.utils.registry;
+package dev.tauri.jsgcore.registry;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import dev.tauri.jsgcore.api.ICommandRegistry;
 import dev.tauri.jsgcore.commands.AbstractCommand;
 import dev.tauri.jsgcore.utils.Logging;
 import net.minecraft.commands.CommandSourceStack;
@@ -10,7 +9,7 @@ import net.minecraft.commands.CommandSourceStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommandRegistry implements ICommandRegistry {
+public class CommandRegistry {
 
     private final List<AbstractCommand> COMMANDS = new ArrayList<>();
 
@@ -22,7 +21,6 @@ public class CommandRegistry implements ICommandRegistry {
         COMMANDS.addAll(List.of(commands));
     }
 
-    @Override
     public void register(CommandDispatcher<CommandSourceStack> dispatcher){
         try {
             LiteralArgumentBuilder<CommandSourceStack> c = LiteralArgumentBuilder.literal("jsg");
