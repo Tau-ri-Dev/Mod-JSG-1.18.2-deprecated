@@ -6,3 +6,5 @@ pluginManagement {
 
 rootProject.name = 'JSG'
 include 'Core'
+include 'MilkyWay'
+

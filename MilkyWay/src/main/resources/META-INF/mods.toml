@@ -26,3 +26,13 @@ license="MIT License"
     versionRange="[1.19,1.20)"
     ordering="NONE"
     side="BOTH"
+
+# -----------------------------
+# INCLUDING CORE MOD
+# -----------------------------
+[[dependencies.jsgcore]]
+    modId="jsg-core"
+    mandatory=true
+    versionRange="[1.0.0.0,)"
+    ordering="NONE"
+    side="BOTH"
