@@ -19,7 +19,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
             property 'forge.enabledGameTestNamespaces', "jsg${mod_id}"
             mods {
-                jsgmilkyway {
+                jsg {
                     source sourceSets.main
                 }
             }
@@ -30,7 +30,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
             property 'forge.enabledGameTestNamespaces', "jsg${mod_id}"
             mods {
-                jsgmilkyway {
+                jsg {
                     source sourceSets.main
                 }
             }
@@ -41,7 +41,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
             property 'forge.enabledGameTestNamespaces', "jsg${mod_id}"
             mods {
-                jsgmilkyway {
+                jsg {
                     source sourceSets.main
                 }
             }
@@ -52,7 +52,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
             args '--mod', "jsg${mod_id}", '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
             mods {
-                jsgmilkyway {
+                jsg {
                     source sourceSets.main
                 }
             }
@@ -61,10 +61,20 @@ minecraft {
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
+
 repositories {
+    mavenCentral()
+    maven {
+        name = "Core"
+        url = "https://files.justsgmod.eu/test/"
+        allowInsecureProtocol = true
+    }
 }
 dependencies {
+
     minecraft 'net.minecraftforge:forge:1.19-41.0.62'
+
+    compileOnly "dev.tauri:jsg-core:1.19-1.0.0.1"
 }
 
 jar {

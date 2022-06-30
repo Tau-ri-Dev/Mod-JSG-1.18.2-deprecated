@@ -19,7 +19,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
             property 'forge.enabledGameTestNamespaces', "jsg${mod_id}"
             mods {
-                jsgmilkyway {
+                jsg {
                     source sourceSets.main
                 }
             }
@@ -30,7 +30,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
             property 'forge.enabledGameTestNamespaces', "jsg${mod_id}"
             mods {
-                jsgmilkyway {
+                jsg {
                     source sourceSets.main
                 }
             }
@@ -41,7 +41,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
             property 'forge.enabledGameTestNamespaces', "jsg${mod_id}"
             mods {
-                jsgmilkyway {
+                jsg {
                     source sourceSets.main
                 }
             }
@@ -52,7 +52,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
             args '--mod', "jsg${mod_id}", '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
             mods {
-                jsgmilkyway {
+                jsg {
                     source sourceSets.main
                 }
             }
