@@ -1,17 +1,10 @@
 package dev.tauri.jsgcore.utils;
 
-import dev.tauri.jsgcore.commands.InfoCommand;
 import dev.tauri.jsgcore.config.AbstractConfigFile;
 import dev.tauri.jsgcore.config.files.JSGClientConfig;
 import dev.tauri.jsgcore.config.files.JSGServerConfig;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.fml.loading.moddiscovery.ModInfo;
@@ -41,6 +34,7 @@ public class ModLoading {
             ModLoadingContext.get().registerConfig(c.type, c.config);
             c.load();
         }
+        System.out.println("Registered!");
     }
 
     private static void setUpAddonsCount(){

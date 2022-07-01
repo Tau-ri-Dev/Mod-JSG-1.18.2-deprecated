@@ -60,7 +60,7 @@ minecraft {
     }
 }
 
-sourceSets.main.resources { srcDir 'src/generated/resources' }
+sourceSets.main.resources { srcDir 'src/main/resources' }
 
 repositories {
     mavenCentral()
@@ -74,7 +74,7 @@ dependencies {
 
     minecraft 'net.minecraftforge:forge:1.19-41.0.62'
 
-    compileOnly "dev.tauri:jsg-core:1.19-1.0.0.0-dev1"
+    compileOnly "dev.tauri:jsg-core:1.19-1.0.0.0-dev3"
 }
 
 jar {

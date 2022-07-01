@@ -3,16 +3,21 @@ package dev.tauri.jsgmilkyway;
 import com.mojang.logging.LogUtils;
 import dev.tauri.jsgcore.JSGCore;
 import dev.tauri.jsgcore.config.files.JSGServerConfig;
+import dev.tauri.jsgmilkyway.block.MilkyWayBlocks;
 import dev.tauri.jsgmilkyway.commands.MWCommand;
 import dev.tauri.jsgmilkyway.config.MainConfig;
+import dev.tauri.jsgmilkyway.item.MilkyWayItems;
+import dev.tauri.jsgmilkyway.tileentity.TileEntityRegistry;
 import dev.tauri.jsgmilkyway.utils.Logging;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
 import static dev.tauri.jsgmilkyway.utils.corenetwork.CoreChecker.isCoreInstalled;
@@ -38,7 +43,12 @@ public class JSGMilkyWay {
             return;
         }
 
+        IEventBus eb = FMLJavaModLoadingContext.get().getModEventBus();
+
         JSGServerConfig.configs.add(new MainConfig());
+        MilkyWayBlocks.register(eb);
+        TileEntityRegistry.register(eb);
+        MilkyWayItems.register(eb);
 
         MinecraftForge.EVENT_BUS.register(this);
     }
