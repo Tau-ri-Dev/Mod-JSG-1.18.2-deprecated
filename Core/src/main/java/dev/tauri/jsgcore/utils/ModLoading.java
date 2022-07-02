@@ -41,7 +41,7 @@ public class ModLoading {
         List<ModInfo> list = FMLLoader.getLoadingModList().getMods();
         for(ModInfo modInfo : list){
             String id = modInfo.getModId();
-            if(id.startsWith(BASE_ID) && !(id.equals(MOD_ID))){
+            if(id.startsWith(MOD_BASE_ID) && !(id.equals(MOD_ID))){
                 INSTALLED_ADDONS++;
             }
         }

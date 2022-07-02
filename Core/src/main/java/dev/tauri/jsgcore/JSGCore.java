@@ -14,15 +14,15 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
 @Mod(JSGCore.MOD_ID)
-public class JSGCore {
+public class JSGCore{
     public static final String MOD_VERSION = "@VERSION@";
     public static final String MC_VERSION = "@MCVERSION@";
     public static final String AUTHORS = "@AUTHORS@";
 
     public static int INSTALLED_ADDONS = 0;
 
-    public static final String BASE_ID = "jsg";
-    public static final String MOD_ID = BASE_ID + "_@MODID@";
+    public static final String MOD_BASE_ID = "jsg";
+    public static final String MOD_ID = MOD_BASE_ID + "_@MODID@";
     public static final String MOD_NAME = "Just Stargate Mod: @MODNAME@";
     public static final Logger LOGGER = LogUtils.getLogger();
 

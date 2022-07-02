@@ -1,4 +1,14 @@
 import org.apache.tools.ant.filters.ReplaceTokens
+buildscript {
+    repositories {
+        // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
+        maven { url = 'https://maven.minecraftforge.net' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+    }
+}
 
 plugins {
     id 'net.minecraftforge.gradle' version '5.1.+'
@@ -72,9 +82,9 @@ repositories {
 }
 dependencies {
 
-    minecraft 'net.minecraftforge:forge:1.19-41.0.62'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.1.0'
 
-    compileOnly "dev.tauri:jsg-core:1.19-1.0.0.0-dev3"
+    compileOnly "dev.tauri:jsg-core:1.18.2-1.0.0.0-dev6"
 }
 
 jar {
@@ -107,22 +117,12 @@ publishing {
 processResources {
     // REPLACING TAGS IN RESOURCES FILES
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    from sourceSets.main.resources.srcDirs
-    filter(ReplaceTokens, tokens: [VERSION: "${project.mod_version}".toString()])
-    filter(ReplaceTokens, tokens: [DESCRIPTION: "${project.description}".toString()])
-    filter(ReplaceTokens, tokens: [MCVERSION: "${project.mc_version}".toString()])
-    filter(ReplaceTokens, tokens: [AUTHORS: "${project.authors}".toString()])
-    filter(ReplaceTokens, tokens: [MODID: "${project.mod_id}".toString()])
-    filter(ReplaceTokens, tokens: [MODNAME: "${project.mod_name}".toString()])
-    into "$buildDir/src"
 }
 task replaceTokens(type: Sync) {
     // REPLACING TAGS IN SOURCE FILES
     from sourceSets.main.java
     filter(ReplaceTokens, tokens: [VERSION: "${project.mod_version}".toString()])
-    filter(ReplaceTokens, tokens: [DESCRIPTION: "${project.description}".toString()])
     filter(ReplaceTokens, tokens: [MCVERSION: "${project.mc_version}".toString()])
-    filter(ReplaceTokens, tokens: [AUTHORS: "${project.authors}".toString()])
     filter(ReplaceTokens, tokens: [MODID: "${project.mod_id}".toString()])
     filter(ReplaceTokens, tokens: [MODNAME: "${project.mod_name}".toString()])
     into "$buildDir/src"

@@ -11,7 +11,7 @@ import net.minecraftforge.fml.loading.FileUtils;
 import java.io.File;
 import java.nio.file.Path;
 
-import static dev.tauri.jsgcore.JSGCore.BASE_ID;
+import static dev.tauri.jsgcore.JSGCore.MOD_BASE_ID;
 
 public abstract class AbstractConfigFile {
 
@@ -26,8 +26,8 @@ public abstract class AbstractConfigFile {
     public abstract String getName();
 
     public void load() {
-        Path path = FMLPaths.CONFIGDIR.get().resolve(BASE_ID);
-        FileUtils.getOrCreateDirectory(path, BASE_ID);
+        Path path = FMLPaths.CONFIGDIR.get().resolve(MOD_BASE_ID);
+        FileUtils.getOrCreateDirectory(path, MOD_BASE_ID);
         path = path.resolve(getName() + ".toml");
         Logging.debug(path.toString());
         final CommentedFileConfig file = CommentedFileConfig.builder(new File(path.toString())).sync().autosave().writingMode(WritingMode.REPLACE).build();

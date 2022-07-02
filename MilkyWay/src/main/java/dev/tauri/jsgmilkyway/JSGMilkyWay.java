@@ -1,8 +1,8 @@
 package dev.tauri.jsgmilkyway;
 
 import com.mojang.logging.LogUtils;
-import dev.tauri.jsgcore.JSGCore;
 import dev.tauri.jsgcore.config.files.JSGServerConfig;
+import dev.tauri.jsgcore.registry.CommandRegistry;
 import dev.tauri.jsgmilkyway.block.MilkyWayBlocks;
 import dev.tauri.jsgmilkyway.commands.MWCommand;
 import dev.tauri.jsgmilkyway.config.MainConfig;
@@ -35,6 +35,9 @@ public class JSGMilkyWay {
     public static final String MOD_NAME = "Just Stargate Mod: @MODNAME@";
     public static final Logger LOGGER = LogUtils.getLogger();
 
+
+    public static final CommandRegistry COMMAND_REGISTRY = new CommandRegistry();
+
     public JSGMilkyWay() {
         if (!isCoreInstalled()) {
             Logging.error("Error while loading!");
@@ -59,7 +62,8 @@ public class JSGMilkyWay {
 
     @SubscribeEvent
     public void onCommandsRegister(RegisterCommandsEvent event) {
-        JSGCore.getCommandRegistry().registerCommand(new MWCommand());
+        COMMAND_REGISTRY.registerCommand(new MWCommand());
+        COMMAND_REGISTRY.register(event.getDispatcher());
     }
 
     @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)

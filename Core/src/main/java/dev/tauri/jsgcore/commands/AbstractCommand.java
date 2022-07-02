@@ -1,23 +1,13 @@
 package dev.tauri.jsgcore.commands;
 
-import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 
 public abstract class AbstractCommand {
-    public ArgumentBuilder<CommandSourceStack, ?> register(){
-        return Commands.literal(getCommandName())
-                .requires(cs->cs.hasPermission(getMinPerms()))
-                .executes(ctx -> {
-                            ctx.getSource().sendSuccess(getSuccessMess(), broadcastToAdmins());
-                            return 0;
-                        }
-                );
-    }
-
     public abstract String getCommandName();
-    public abstract Component getSuccessMess();
+    public abstract void execute(CommandContext<CommandSourceStack> command);
+    public abstract void execute(CommandContext<CommandSourceStack> command, Player player);
     public abstract boolean broadcastToAdmins();
     public abstract int getMinPerms();
 }

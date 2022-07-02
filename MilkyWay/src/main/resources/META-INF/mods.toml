@@ -1,38 +1,26 @@
 
 modLoader="javafml" #mandatory
-loaderVersion="[41,)" #mandatory
+loaderVersion="[40,)" #mandatory
 license="MIT License"
 [[mods]] #mandatory
-    modId="jsg_@MODID@" #mandatory
-    version="@VERSION@" #mandatory
-    displayName="Just Stargate Mod: @MODNAME@" #mandatory
+    modId="jsg_milkyway" #mandatory
+    version="1.0.0.0" #mandatory
+    displayName="Just Stargate Mod: MilkyWay" #mandatory
     displayURL="https://justsgmod.eu/" #optional
     logoFile="mod.png" #optional
-    authors="@AUTHORS@" #optional
-    description='''
-    @DESCRIPTION@
-    '''
+    authors="MineDragonCZ_, matousss, frfole" #optional
+    description='''MilkyWay addon for Just Stargate Mod.\nNeeds JSG: Core mod.'''
 
 
-[[dependencies.jsg@MODID@]] #optional
+[[dependencies.jsg_milkyway]] #optional
     modId="forge" #mandatory
     mandatory=true #mandatory
-    versionRange="[41,)" #mandatory
+    versionRange="[40,)" #mandatory
     ordering="NONE"
     side="BOTH"
-[[dependencies.jsg@MODID@]]
+[[dependencies.jsg_milkyway]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19,1.20)"
-    ordering="NONE"
-    side="BOTH"
-
-# -----------------------------
-# INCLUDING CORE MOD
-# -----------------------------
-[[dependencies.jsgcore]]
-    modId="jsg_core"
-    mandatory=true
-    versionRange="[1.0.0.0,2.0.0.0)"
+    versionRange="[1.18.2,1.19)"
     ordering="NONE"
     side="BOTH"

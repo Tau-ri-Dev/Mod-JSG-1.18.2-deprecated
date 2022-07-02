@@ -33,4 +33,5 @@ public class MilkyWayBlocks {
     }
 
     public static final RegistryObject<Block> SG_BASE_BLOCK = registerBlock("stargate_milkyway_base_block", StargateMilkyWayBaseBlock::new, JSGTabs.TAB_MILKYWAY);
+    public static final RegistryObject<Block> SG_MEMBER_BLOCK = registerBlock("stargate_milkyway_member_block", StargateMilkyWayMemberBlock::new, JSGTabs.TAB_MILKYWAY);
 }
