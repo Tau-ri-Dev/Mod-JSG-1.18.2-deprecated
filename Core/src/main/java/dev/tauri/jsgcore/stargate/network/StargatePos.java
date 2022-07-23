@@ -1,25 +1,26 @@
 package dev.tauri.jsgcore.stargate.network;
 
-import dev.tauri.jsgcore.stargate.network.address.StargateAddress;
-import dev.tauri.jsgcore.stargate.network.symbols.ISymbolType;
-import dev.tauri.jsgcore.stargate.network.symbols.SymbolInterface;
 import net.minecraft.core.BlockPos;
-
-import java.util.ArrayList;
-import java.util.List;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.Level;
 
 public class StargatePos {
-    public int dimensionID;
-    public BlockPos gatePos;
-    public ISymbolType symbolType;
-    public List<SymbolInterface> additionalSymbols;
 
-    public StargatePos(int dimensionID, BlockPos gatePos, StargateAddress stargateAddress) {
-        this.dimensionID = dimensionID;
-        this.gatePos = gatePos;
+    public String dim;
+    public BlockPos pos;
 
-        this.symbolType = stargateAddress.symbolType;
-        this.additionalSymbols = new ArrayList<>(2);
-        //this.additionalSymbols.addAll(stargateAddress.getAdditional());
+    public StargatePos(ResourceKey<Level> level, BlockPos pos){
+        this.dim = level.location().getNamespace() + ":" + level.location().getPath();
+        this.pos = pos;
+    }
+
+    public StargatePos(String data){
+        String[] d = data.split(";");
+        dim = d[0];
+        pos = BlockPos.of(Long.parseLong(d[1]));
+    }
+
+    public String toString(){
+        return dim + ";" + pos.asLong();
     }
 }

@@ -8,7 +8,7 @@ import dev.tauri.jsgcore.config.configs.MainConfig;
 import java.util.ArrayList;
 import java.util.List;
 
-import static dev.tauri.jsgcore.JSGCore.MOD_ID;
+import static dev.tauri.jsgcore.JSGCore.MOD_BASE_ID;
 import static net.minecraftforge.fml.config.ModConfig.Type.SERVER;
 
 public class JSGServerConfig extends AbstractConfigFile {
@@ -26,5 +26,5 @@ public class JSGServerConfig extends AbstractConfigFile {
     }
 
     @Override
-    public String getName(){ return MOD_ID + "-server"; }
+    public String getName(){ return MOD_BASE_ID + "-server"; }
 }

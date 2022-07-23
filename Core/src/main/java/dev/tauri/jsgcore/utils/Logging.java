@@ -1,21 +1,23 @@
 package dev.tauri.jsgcore.utils;
 
-import dev.tauri.jsgcore.JSGCore;
+import com.mojang.logging.LogUtils;
+import org.slf4j.Logger;
 
 public class Logging {
+    private static final Logger LOGGER = LogUtils.getLogger();
     public static void info(String s) {
-        JSGCore.LOGGER.info(s);
+        LOGGER.info(s);
     }
 
     public static void error(String s) {
-        JSGCore.LOGGER.error(s);
+        LOGGER.error(s);
     }
 
     public static void warn(String s) {
-        JSGCore.LOGGER.warn(s);
+        LOGGER.warn(s);
     }
 
     public static void debug(String s) {
-        JSGCore.LOGGER.debug(s);
+        LOGGER.debug(s);
     }
 }

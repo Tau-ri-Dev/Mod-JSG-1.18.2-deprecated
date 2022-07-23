@@ -3,10 +3,12 @@ package dev.tauri.jsgmilkyway;
 import com.mojang.logging.LogUtils;
 import dev.tauri.jsgcore.config.files.JSGServerConfig;
 import dev.tauri.jsgcore.registry.CommandRegistry;
+import dev.tauri.jsgcore.stargate.symbols.SymbolsRegistry;
 import dev.tauri.jsgmilkyway.block.MilkyWayBlocks;
 import dev.tauri.jsgmilkyway.commands.MWCommand;
 import dev.tauri.jsgmilkyway.config.MainConfig;
 import dev.tauri.jsgmilkyway.item.MilkyWayItems;
+import dev.tauri.jsgmilkyway.stargate.symbols.MilkyWaySymbolsManager;
 import dev.tauri.jsgmilkyway.tileentity.TileEntityRegistry;
 import dev.tauri.jsgmilkyway.utils.Logging;
 import net.minecraft.client.Minecraft;
@@ -52,6 +54,8 @@ public class JSGMilkyWay {
         MilkyWayBlocks.register(eb);
         TileEntityRegistry.register(eb);
         MilkyWayItems.register(eb);
+
+        SymbolsRegistry.registerManager(new MilkyWaySymbolsManager());
 
         MinecraftForge.EVENT_BUS.register(this);
     }

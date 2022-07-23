@@ -6,7 +6,7 @@ import dev.tauri.jsgcore.config.AbstractConfigFile;
 import java.util.ArrayList;
 import java.util.List;
 
-import static dev.tauri.jsgcore.JSGCore.MOD_ID;
+import static dev.tauri.jsgcore.JSGCore.MOD_BASE_ID;
 import static net.minecraftforge.fml.config.ModConfig.Type.CLIENT;
 
 public class JSGClientConfig extends AbstractConfigFile {
@@ -24,5 +24,5 @@ public class JSGClientConfig extends AbstractConfigFile {
     }
 
     @Override
-    public String getName(){ return MOD_ID + "-client"; }
+    public String getName(){ return MOD_BASE_ID + "-client"; }
 }

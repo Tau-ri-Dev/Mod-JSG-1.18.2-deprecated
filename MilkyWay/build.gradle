@@ -84,7 +84,7 @@ dependencies {
 
     minecraft 'net.minecraftforge:forge:1.18.2-40.1.0'
 
-    compileOnly "dev.tauri:jsg-core:1.18.2-1.0.0.0-dev6"
+    compileOnly "${jsg_core}"
 }
 
 jar {

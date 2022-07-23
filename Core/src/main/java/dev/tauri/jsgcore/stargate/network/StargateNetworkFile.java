@@ -1,48 +1,51 @@
 package dev.tauri.jsgcore.stargate.network;
 
-import dev.tauri.jsgcore.stargate.network.address.StargateAddress;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import dev.tauri.jsgcore.utils.Logging;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.saveddata.SavedData;
-import net.minecraft.world.level.storage.DimensionDataStorage;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.world.level.storage.LevelResource;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.util.ArrayList;
+import java.io.*;
+import java.nio.file.Path;
 
-import static dev.tauri.jsgcore.stargate.network.StargateNetwork.FILE_NAME;
+import static dev.tauri.jsgcore.JSGCore.MOD_BASE_ID;
 
-public class StargateNetworkFile extends SavedData {
+public class StargateNetworkFile{
 
-    // Get network
-    public static StargateNetworkFile get(Level level){
-        if(!level.isClientSide){
-            DimensionDataStorage storage = ((ServerLevel) level).getDataStorage();
-            return storage.computeIfAbsent(StargateNetworkFile::new, StargateNetworkFile::new, FILE_NAME);
+    public static final String FILE_NAME = MOD_BASE_ID + "_StargateNetwork";
+    public static final String FILE_END = "sg";
+
+    public static StargateNetworkData NETWORK = new StargateNetworkData();
+
+    public static File getNetwork(ServerLevel level) throws IOException {
+        Path worldDir = level.getServer().getWorldPath(LevelResource.ROOT);
+
+        File jsgDir = new File(worldDir.toFile(), MOD_BASE_ID);
+        File network = new File(jsgDir, FILE_NAME + "." + FILE_END);
+        if(!jsgDir.mkdirs()){
+            Logging.info("Network: Dirs exist!");
         }
+        if (!network.createNewFile()) {
+            Logging.info("Network: File " + network.getPath() + " already exists!");
+        }
+        return network;
+    }
+
+    @Nullable
+    public static StargateNetworkData load(ServerLevel level) {
+        try {
+            File network = getNetwork(level);
+            return NETWORK.setNetwork(network);
+        }
+        catch (Exception ignored){}
         return null;
     }
 
-    // Create new data storage
-    public StargateNetworkFile(){
-
-    }
-
-    // Use generated data storage
-    public StargateNetworkFile(CompoundTag tag){
-
-    }
-
-    @Override
-    public @NotNull CompoundTag save(@NotNull CompoundTag compoundTag) {
-        ListTag list = new ListTag();
-        ArrayList<StargateAddress> gates = StargateNetwork.getStargates();
-        for(int i = 0; i < gates.size(); i++){
-            CompoundTag tag = new CompoundTag();
-            //tag.put("address", gates.get(i).serializeNBT());
+    public static void save(ServerLevel level, StargateNetworkData data) {
+        try {
+            File network = getNetwork(level);
+            data.save(network);
         }
-        compoundTag.put("sg_network", list);
-        return compoundTag;
+        catch (Exception ignored){}
     }
 }
