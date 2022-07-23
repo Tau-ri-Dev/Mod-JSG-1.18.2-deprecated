@@ -22,6 +22,7 @@ public class StargateNetworkFile{
 
         File jsgDir = new File(worldDir.toFile(), MOD_BASE_ID);
         File network = new File(jsgDir, FILE_NAME + "." + FILE_END);
+        NETWORK.setFile(network);
         if(!jsgDir.mkdirs()){
             Logging.info("Network: Dirs exist!");
         }

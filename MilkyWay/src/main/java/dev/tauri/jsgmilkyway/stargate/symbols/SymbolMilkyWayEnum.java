@@ -47,7 +47,7 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
     PISCISAUSTRINUS(37, 15, "Piscis Austrinus", "37.obj"),
 
 
-    BRB(40, -1, "Bright Red Button", "BRB.obj"),
+    BRB(40, -1, "Bright Red Button", "brb.obj"),
 
     TAURI_ORIGIN(50, 0, "Tauri Point of Origin", "50.obj"),
     ANOTHER_ORIGIN(51, 0, "Another Point of Origin", "51.obj")

@@ -11,11 +11,14 @@ import java.util.Scanner;
 public class StargateNetworkData {
     private final Map<StargatePos, StargateAddress> map = new HashMap<>();
 
+    private File networkFile = null;
+
     public StargateNetworkData(){}
 
     public StargateNetworkData setNetwork(File network) throws FileNotFoundException{
         if(!network.exists()) return this;
         Scanner reader = new Scanner(network);
+        map.clear();
         while(reader.hasNextLine()){
             String line = reader.nextLine();
             Logging.info("Loading: " + line);
@@ -27,8 +30,17 @@ public class StargateNetworkData {
         return this;
     }
 
+    public void setFile(File network){
+        networkFile = network;
+    }
+
     public void addStargateToNetwork(StargatePos pos, StargateAddress address){
         map.put(pos, address);
+        if(networkFile != null){
+            try {
+                save(networkFile);
+            }catch (Exception ignored){}
+        }
     }
 
     public void save(File network) throws IOException {
@@ -55,6 +67,7 @@ public class StargateNetworkData {
             output.append(address.toString());
 
             // write to the file
+            output.append("\n");
             writer.write(output.toString());
             i++;
 
