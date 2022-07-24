@@ -21,6 +21,7 @@ public class TileEntityRegistry {
         return TILE_ENTITY_TYPES.register(name, () -> BlockEntityType.Builder.of(supplier, block).build(null));
     }
 
-    public static final RegistryObject<BlockEntityType<StargateMilkyWayBaseTile>> SG_MILKYWAY_BASE_TILE = TILE_ENTITY_TYPES.register("stargate_milkyway_base", () -> BlockEntityType.Builder.of(StargateMilkyWayBaseTile::new, MilkyWayBlocks.SG_BASE_BLOCK.get()).build(null));
-    public static final RegistryObject<BlockEntityType<StargateMilkyWayMemberTile>> SG_MILKYWAY_MEMBER_TILE = TILE_ENTITY_TYPES.register("stargate_milkyway_member", () -> BlockEntityType.Builder.of(StargateMilkyWayMemberTile::new, MilkyWayBlocks.SG_MEMBER_BLOCK.get()).build(null));
+    public static final RegistryObject<BlockEntityType<StargateMilkyWayBaseTile>> SG_MILKYWAY_BASE_TILE = TILE_ENTITY_TYPES.register("sg_milkyway_base", () -> BlockEntityType.Builder.of(StargateMilkyWayBaseTile::new, MilkyWayBlocks.SG_BASE_BLOCK.get()).build(null));
+    public static final RegistryObject<BlockEntityType<StargateMilkyWayMemberTile>> SG_MILKYWAY_CHEVRON_TILE = TILE_ENTITY_TYPES.register("sg_milkyway_chevron", () -> BlockEntityType.Builder.of(StargateMilkyWayMemberTile::new, MilkyWayBlocks.SG_CHEVRON_BLOCK.get()).build(null));
+    public static final RegistryObject<BlockEntityType<StargateMilkyWayMemberTile>> SG_MILKYWAY_RING_TILE = TILE_ENTITY_TYPES.register("sg_milkyway_ring", () -> BlockEntityType.Builder.of(StargateMilkyWayMemberTile::new, MilkyWayBlocks.SG_RING_BLOCK.get()).build(null));
 }

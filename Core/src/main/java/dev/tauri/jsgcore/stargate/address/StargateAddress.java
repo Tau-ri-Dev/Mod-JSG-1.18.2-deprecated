@@ -23,8 +23,13 @@ public class StargateAddress {
         for(AbstractSymbolsManager symbolManager : SymbolsRegistry.REGISTRY){
             ArrayList<SymbolInterface> symbols = new ArrayList<>();
             for(int i = 0; i < 9; i ++){
-                symbols.add(symbolManager.getRandomSymbol(random));
-                Logging.info("L1");
+                SymbolInterface symbol;
+
+                do{
+                    symbol = symbolManager.getRandomSymbol(random);
+                }while(symbols.contains(symbol));
+
+                symbols.add(symbol);
             }
             addresses.put(symbolManager.getSymbolType(), new StargateAddressDynamic(symbols));
         }

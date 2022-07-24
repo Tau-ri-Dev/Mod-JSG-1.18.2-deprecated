@@ -32,6 +32,7 @@ public class MilkyWayBlocks {
         BLOCKS_REGISTRY.register(eb);
     }
 
-    public static final RegistryObject<Block> SG_BASE_BLOCK = registerBlock("stargate_milkyway_base_block", StargateMilkyWayBaseBlock::new, JSGTabs.TAB_MILKYWAY);
-    public static final RegistryObject<Block> SG_MEMBER_BLOCK = registerBlock("stargate_milkyway_member_block", StargateMilkyWayMemberBlock::new, JSGTabs.TAB_MILKYWAY);
+    public static final RegistryObject<Block> SG_BASE_BLOCK = registerBlock("sg_base_block", StargateMilkyWayBaseBlock::new, JSGTabs.TAB_MILKYWAY);
+    public static final RegistryObject<Block> SG_CHEVRON_BLOCK = registerBlock("sg_chevron_block", StargateMilkyWayChevronBlock::new, JSGTabs.TAB_MILKYWAY);
+    public static final RegistryObject<Block> SG_RING_BLOCK = registerBlock("sg_ring_block", StargateMilkyWayRingBlock::new, JSGTabs.TAB_MILKYWAY);
 }

@@ -21,7 +21,7 @@ public class StargateNetworkData {
         map.clear();
         while(reader.hasNextLine()){
             String line = reader.nextLine();
-            Logging.info("Loading: " + line);
+            Logging.debug("Loading: " + line);
             String[] data = line.split("::");
             StargatePos pos = new StargatePos(data[1]);
             StargateAddress address = new StargateAddress(data[2]);
@@ -71,7 +71,7 @@ public class StargateNetworkData {
             writer.write(output.toString());
             i++;
 
-            Logging.info("Saving: " + output);
+            Logging.debug("Saving: " + output);
         }
         writer.close();
     }

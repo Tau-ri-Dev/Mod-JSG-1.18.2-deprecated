@@ -28,9 +28,6 @@ public class TestCommand extends AbstractCommand{
     @Override
     public void execute(CommandContext<CommandSourceStack> command, Player player) {
         player.sendMessage(new TextComponent("Test!"), Util.NIL_UUID);
-        Random rand = new Random();
-        StargateNetworkFile.NETWORK.addStargateToNetwork(new StargatePos(Level.OVERWORLD, new BlockPos(rand.nextInt(50), rand.nextInt(50), rand.nextInt(50))), new StargateAddress(rand));
-        Logging.info(player.getServer().overworld().toString());
     }
 
     @Override

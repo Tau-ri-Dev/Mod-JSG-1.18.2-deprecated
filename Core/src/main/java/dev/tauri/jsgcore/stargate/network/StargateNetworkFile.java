@@ -24,10 +24,10 @@ public class StargateNetworkFile{
         File network = new File(jsgDir, FILE_NAME + "." + FILE_END);
         NETWORK.setFile(network);
         if(!jsgDir.mkdirs()){
-            Logging.info("Network: Dirs exist!");
+            Logging.debug("Network: Dirs exist!");
         }
         if (!network.createNewFile()) {
-            Logging.info("Network: File " + network.getPath() + " already exists!");
+            Logging.debug("Network: File " + network.getPath() + " already exists!");
         }
         return network;
     }

@@ -11,10 +11,11 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import org.jetbrains.annotations.NotNull;
 
-public class RotatableBlock extends Block {
-    public static final DirectionProperty FACING = BlockStateProperties.FACING;
-    public RotatableBlock(Properties properties) {
+public abstract class RotatableBlock extends Block {
+    public static DirectionProperty FACING = BlockStateProperties.FACING;
+    public RotatableBlock(Properties properties, boolean verticalPlacing) {
         super(properties);
+        if(!verticalPlacing) FACING = BlockStateProperties.HORIZONTAL_FACING;
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
@@ -29,7 +30,7 @@ public class RotatableBlock extends Block {
     }
 
     @Override
-    public BlockState mirror(BlockState pState, Mirror pMirror) {
+    public @NotNull BlockState mirror(BlockState pState, Mirror pMirror) {
         return pState.rotate(pMirror.getRotation(pState.getValue(FACING)));
     }
 

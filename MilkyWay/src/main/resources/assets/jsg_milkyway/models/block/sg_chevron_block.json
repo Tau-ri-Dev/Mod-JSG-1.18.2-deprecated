@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "particle": "jsg_milkyway:block/naquadah_block",
+    "north": "jsg_milkyway:block/gate_front_chevron",
+    "south": "jsg_milkyway:block/naquadah_block",
+    "west": "jsg_milkyway:block/naquadah_block",
+    "east": "jsg_milkyway:block/naquadah_block",
+    "up": "jsg_milkyway:block/naquadah_block",
+    "down": "jsg_milkyway:block/naquadah_block"
+  }
+}

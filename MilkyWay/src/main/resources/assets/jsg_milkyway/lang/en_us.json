@@ -1,5 +1,7 @@
 {
   "itemGroup.jsg_milkyway": "JSG: MilkyWay",
 
-  "block.jsg_milkyway.stargate_milkyway_base_block": "Stargate Base Block (MilkyWay)"
+  "block.jsg_milkyway.sg_base_block": "Stargate Base Block (MilkyWay)",
+  "block.jsg_milkyway.sg_chevron_block": "Stargate Chevron Block (MilkyWay)",
+  "block.jsg_milkyway.sg_ring_block": "Stargate Ring Block (MilkyWay)"
 }
