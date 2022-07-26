@@ -1,7 +1,10 @@
 package dev.tauri.jsgcore.tileentity;
 
+import dev.tauri.jsgcore.block.stargate.StargateAbstractMemberBlock;
 import dev.tauri.jsgcore.screen.stargate.StargateMenu;
 import dev.tauri.jsgcore.stargate.merging.StargateAbstractMergeHelper;
+import dev.tauri.jsgcore.utils.FacingToRotation;
+import dev.tauri.jsgcore.utils.Logging;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -27,6 +30,11 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 
+import java.util.Objects;
+
+import static dev.tauri.jsgcore.block.RotatableBlock.FACING;
+import static dev.tauri.jsgcore.block.stargate.StargateAbstractMemberBlock.MERGED;
+
 public abstract class StargateAbstractBaseTile extends BlockEntity implements MenuProvider {
 
     public static final int STARGATE_CONTAINER_SIZE = 12;
@@ -51,14 +59,37 @@ public abstract class StargateAbstractBaseTile extends BlockEntity implements Me
 
     public void onMerge(){
         isMerged = true;
+        if(level != null && !level.getBlockState(worldPosition).isAir())
+            level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(MERGED, Boolean.TRUE), 2);
+        setChanged();
+        Logging.info("Merged!!");
     }
 
     public void onUnmerged(){
         isMerged = false;
+        if(level != null) {
+            if(!level.getBlockState(worldPosition).isAir()) {
+                level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(MERGED, Boolean.FALSE), 2);
+                for (BlockPos pos : getMergeHelper().getRingBlocks()) {
+                    BlockPos newPos = FacingToRotation.rotatePos(pos, level.getBlockState(worldPosition).getValue(FACING)).offset(worldPosition);
+                    BlockEntity tile = level.getBlockEntity(newPos);
+                    if (tile != null)
+                        ((StargateAbstractMemberTile) tile).setMerged(false);
+                }
+                for (BlockPos pos : getMergeHelper().getChevronBlocks()) {
+                    BlockPos newPos = FacingToRotation.rotatePos(pos, level.getBlockState(worldPosition).getValue(FACING)).offset(worldPosition);
+                    BlockEntity tile = level.getBlockEntity(newPos);
+                    if (tile != null)
+                        ((StargateAbstractMemberTile) tile).setMerged(false);
+                }
+            }
+        }
+        setChanged();
+        Logging.info("Unmerged!!");
     }
 
     public void onBreak(){
-        isMerged = false;
+        onUnmerged();
     }
 
     public BlockPos getPos(){

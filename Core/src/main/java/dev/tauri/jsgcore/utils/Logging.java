@@ -10,14 +10,14 @@ public class Logging {
     }
 
     public static void error(String s) {
-        LOGGER.error(s);
+        LOGGER.error("JSG: " + s);
     }
 
     public static void warn(String s) {
-        LOGGER.warn(s);
+        LOGGER.warn("JSG: " + s);
     }
 
     public static void debug(String s) {
-        LOGGER.debug(s);
+        LOGGER.debug("JSG: " + s);
     }
 }

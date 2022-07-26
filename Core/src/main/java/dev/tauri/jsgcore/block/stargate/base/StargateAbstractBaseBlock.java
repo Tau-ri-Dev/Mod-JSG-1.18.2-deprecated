@@ -3,7 +3,6 @@ package dev.tauri.jsgcore.block.stargate.base;
 import dev.tauri.jsgcore.block.RotatableBlock;
 import dev.tauri.jsgcore.stargate.merging.StargateAbstractMergeHelper;
 import dev.tauri.jsgcore.tileentity.StargateAbstractBaseTile;
-import dev.tauri.jsgcore.tileentity.StargateAbstractMemberTile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,7 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -27,9 +26,18 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nonnull;
 import java.util.List;
 
+import static dev.tauri.jsgcore.block.stargate.StargateAbstractMemberBlock.MERGED;
+
 public abstract class StargateAbstractBaseBlock extends RotatableBlock implements EntityBlock {
     public StargateAbstractBaseBlock(Properties properties) {
         super(properties.explosionResistance(60f).requiresCorrectToolForDrops().noOcclusion());
+        registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(MERGED, true));
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
+        pBuilder.add(MERGED);
+        super.createBlockStateDefinition(pBuilder);
     }
 
     @Nullable
@@ -40,6 +48,8 @@ public abstract class StargateAbstractBaseBlock extends RotatableBlock implement
 
     @Override
     public @NotNull RenderShape getRenderShape(@NotNull BlockState pState) {
+        if(pState.getValue(MERGED))
+            return RenderShape.INVISIBLE;
         return RenderShape.MODEL;
     }
 
@@ -63,6 +73,8 @@ public abstract class StargateAbstractBaseBlock extends RotatableBlock implement
                 BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
                 if (blockEntity instanceof StargateAbstractBaseTile) {
                     ((StargateAbstractBaseTile) blockEntity).drops();
+                    ((StargateAbstractBaseTile) blockEntity).onBreak();
+
                 }
             }
         }
@@ -139,6 +151,11 @@ public abstract class StargateAbstractBaseBlock extends RotatableBlock implement
     }
 
     protected abstract BlockState createMemberState(BlockState memberState, Direction facing);
+
+    /*@Override
+    public boolean skipRendering(@NotNull BlockState blockState, @NotNull BlockState blockState1, @NotNull Direction direction) {
+        return blockState.getValue(MERGED);
+    }*/
 
 
 }
