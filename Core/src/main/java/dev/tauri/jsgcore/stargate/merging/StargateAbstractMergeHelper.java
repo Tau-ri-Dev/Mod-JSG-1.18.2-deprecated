@@ -101,22 +101,6 @@ public abstract class StargateAbstractMergeHelper {
     public void updateMembersBasePos(Level blockAccess, BlockPos basePos, Direction baseFacing) {
     }
 
-    public void tryMerge(Level level, BlockPos pos, BlockState state){
-        if(!level.isClientSide()){
-            BlockEntity tile = level.getBlockEntity(pos);
-            if(tile instanceof StargateAbstractBaseTile){
-                StargateAbstractBaseTile baseTile = (StargateAbstractBaseTile) tile;
-                // check gate structure
-            }
-            if(tile instanceof StargateAbstractMemberTile){
-                StargateAbstractMemberTile memberTile = (StargateAbstractMemberTile) tile;
-                StargateAbstractBaseTile baseTile = memberTile.getBaseTile();
-                // check gate structure
-
-            }
-        }
-    }
-
     public int getMemberVariantFromItemStack(ItemStack stack){
         if(Block.byItem(stack.getItem()) instanceof StargateAbstractChevronBlock)
             return 1;

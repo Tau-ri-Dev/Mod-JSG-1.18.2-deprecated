@@ -15,11 +15,7 @@ public abstract class RotatableBlock extends Block {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public RotatableBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(onDefaultStateRegister(this.stateDefinition.any()));
-    }
-
-    public BlockState onDefaultStateRegister(BlockState state){
-        return state.setValue(FACING, Direction.NORTH);
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
     @Override

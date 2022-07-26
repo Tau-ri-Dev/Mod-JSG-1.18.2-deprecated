@@ -11,7 +11,6 @@ public abstract class StargateClassicBaseBlock extends StargateAbstractBaseBlock
 
     @Override
     protected BlockState createMemberState(BlockState memberState, Direction facing) {
-        return memberState.setValue(MERGED, true)
-                .setValue(FACING, facing);
+        return memberState.setValue(FACING, facing);
     }
 }

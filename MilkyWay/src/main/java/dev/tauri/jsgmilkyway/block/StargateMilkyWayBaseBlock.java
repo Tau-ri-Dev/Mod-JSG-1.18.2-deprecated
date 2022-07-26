@@ -50,12 +50,12 @@ public class StargateMilkyWayBaseBlock extends StargateClassicBaseBlock {
 
     @Override
     public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level pLevel, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit){
-        if(!pLevel.isClientSide()){
+        /*if(!pLevel.isClientSide()){
             BlockEntity tile = pLevel.getBlockEntity(pos);
             if(tile instanceof StargateMilkyWayBaseTile){
                 ((StargateMilkyWayMergeHelper) ((StargateMilkyWayBaseTile) tile).getMergeHelper()).build(pLevel, pos);
             }
-        }
+        }*/
         return super.use(state, pLevel, pos, player, hand, hit);
     }
 }

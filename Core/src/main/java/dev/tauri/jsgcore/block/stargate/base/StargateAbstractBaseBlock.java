@@ -3,6 +3,7 @@ package dev.tauri.jsgcore.block.stargate.base;
 import dev.tauri.jsgcore.block.RotatableBlock;
 import dev.tauri.jsgcore.stargate.merging.StargateAbstractMergeHelper;
 import dev.tauri.jsgcore.tileentity.StargateAbstractBaseTile;
+import dev.tauri.jsgcore.tileentity.StargateAbstractMemberTile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,15 +28,8 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 public abstract class StargateAbstractBaseBlock extends RotatableBlock implements EntityBlock {
-    public static final BooleanProperty MERGED = BooleanProperty.create("merged");
     public StargateAbstractBaseBlock(Properties properties) {
         super(properties.explosionResistance(60f).requiresCorrectToolForDrops().noOcclusion());
-    }
-
-    @Override
-    public BlockState onDefaultStateRegister(BlockState state){
-        state.setValue(MERGED, false);
-        return super.onDefaultStateRegister(state);
     }
 
     @Nullable
@@ -78,7 +72,10 @@ public abstract class StargateAbstractBaseBlock extends RotatableBlock implement
     @Override
     public void setPlacedBy(@Nonnull Level level, @Nonnull BlockPos blockPos, @Nonnull BlockState blockState, @Nullable LivingEntity placedBy, @Nonnull ItemStack itemStack) {
         if(!level.isClientSide()){
-            getMergeHelper().tryMerge(level, blockPos, blockState);
+            final StargateAbstractBaseTile gateTile = (StargateAbstractBaseTile) level.getBlockEntity(blockPos);
+            final Direction facing = level.getBlockState(blockPos).getValue(FACING);
+            if(gateTile != null)
+                gateTile.updateMergeState(gateTile.getMergeHelper().checkBlocks(level, blockPos, facing), facing);
         }
         super.setPlacedBy(level, blockPos, blockState, placedBy, itemStack);
     }

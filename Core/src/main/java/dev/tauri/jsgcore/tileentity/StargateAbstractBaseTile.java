@@ -27,8 +27,6 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 
-import static dev.tauri.jsgcore.block.stargate.base.StargateAbstractBaseBlock.MERGED;
-
 public abstract class StargateAbstractBaseTile extends BlockEntity implements MenuProvider {
 
     public static final int STARGATE_CONTAINER_SIZE = 12;
@@ -61,6 +59,10 @@ public abstract class StargateAbstractBaseTile extends BlockEntity implements Me
 
     public void onBreak(){
         isMerged = false;
+    }
+
+    public BlockPos getPos(){
+        return worldPosition;
     }
 
     @Override
@@ -154,12 +156,6 @@ public abstract class StargateAbstractBaseTile extends BlockEntity implements Me
 
         this.isMerged = shouldBeMerged;
         if(level == null) return;
-        BlockState actualState = level.getBlockState(worldPosition);
-
-        // When the block is destroyed, there will be air in this place and we cannot set its block state
-        if (getMergeHelper().matchBase(actualState)) {
-            level.setBlock(worldPosition, actualState.setValue(MERGED, !shouldBeMerged), 2);
-        }
 
         getMergeHelper().updateMembersMergeStatus(level, worldPosition, facing, shouldBeMerged);
 

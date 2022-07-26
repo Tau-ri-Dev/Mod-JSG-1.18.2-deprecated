@@ -8,8 +8,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-import static dev.tauri.jsgcore.block.stargate.base.StargateAbstractBaseBlock.MERGED;
-
 public abstract class StargateClassicMergeHelper extends StargateAbstractMergeHelper{
 
     @Override
@@ -40,8 +38,7 @@ public abstract class StargateClassicMergeHelper extends StargateAbstractMergeHe
 
                 // This also sets merge status
                 memberTile.setBasePos(shouldBeMerged ? basePos : null);
-
-                world.setBlock(checkPos, state.setValue(MERGED, !shouldBeMerged), 3);
+                memberTile.setMerged(!shouldBeMerged);
             }
         }
     }
