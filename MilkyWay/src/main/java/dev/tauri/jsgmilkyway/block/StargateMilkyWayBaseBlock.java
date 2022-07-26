@@ -2,10 +2,14 @@ package dev.tauri.jsgmilkyway.block;
 
 import dev.tauri.jsgcore.block.stargate.base.StargateClassicBaseBlock;
 import dev.tauri.jsgcore.stargate.merging.StargateAbstractMergeHelper;
+import dev.tauri.jsgcore.tileentity.StargateAbstractBaseTile;
 import dev.tauri.jsgmilkyway.stargate.merging.StargateMilkyWayMergeHelper;
 import dev.tauri.jsgmilkyway.tileentity.StargateMilkyWayBaseTile;
 import dev.tauri.jsgmilkyway.tileentity.TileEntityRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -13,6 +17,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,5 +46,16 @@ public class StargateMilkyWayBaseBlock extends StargateClassicBaseBlock {
     @javax.annotation.Nullable
     protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> createTickerHelper(BlockEntityType<A> p_152133_, BlockEntityType<E> p_152134_, BlockEntityTicker<? super E> p_152135_) {
         return p_152134_ == p_152133_ ? ((BlockEntityTicker<A>)p_152135_) : null;
+    }
+
+    @Override
+    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level pLevel, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit){
+        if(!pLevel.isClientSide()){
+            BlockEntity tile = pLevel.getBlockEntity(pos);
+            if(tile instanceof StargateMilkyWayBaseTile){
+                ((StargateMilkyWayMergeHelper) ((StargateMilkyWayBaseTile) tile).getMergeHelper()).build(pLevel, pos);
+            }
+        }
+        return super.use(state, pLevel, pos, player, hand, hit);
     }
 }

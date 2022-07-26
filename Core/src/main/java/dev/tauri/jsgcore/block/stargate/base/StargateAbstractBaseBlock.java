@@ -4,7 +4,9 @@ import dev.tauri.jsgcore.block.RotatableBlock;
 import dev.tauri.jsgcore.stargate.merging.StargateAbstractMergeHelper;
 import dev.tauri.jsgcore.tileentity.StargateAbstractBaseTile;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -15,16 +17,25 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 
 public abstract class StargateAbstractBaseBlock extends RotatableBlock implements EntityBlock {
+    public static final BooleanProperty MERGED = BooleanProperty.create("merged");
     public StargateAbstractBaseBlock(Properties properties) {
-        super(properties.explosionResistance(60f).requiresCorrectToolForDrops().noOcclusion(), true);
+        super(properties.explosionResistance(60f).requiresCorrectToolForDrops().noOcclusion());
+    }
+
+    @Override
+    public BlockState onDefaultStateRegister(BlockState state){
+        state.setValue(MERGED, false);
+        return super.onDefaultStateRegister(state);
     }
 
     @Nullable
@@ -43,7 +54,9 @@ public abstract class StargateAbstractBaseBlock extends RotatableBlock implement
         if(!pLevel.isClientSide()){
             BlockEntity entity = pLevel.getBlockEntity(pos);
             if(entity instanceof StargateAbstractBaseTile){
-                NetworkHooks.openGui(((ServerPlayer) player), ((StargateAbstractBaseTile) entity), pos);
+                if (!player.isShiftKeyDown() && !tryAutobuild(player, pLevel, pos, hand)) {
+                    NetworkHooks.openGui(((ServerPlayer) player), ((StargateAbstractBaseTile) entity), pos);
+                }
             }
         }
         return InteractionResult.sidedSuccess(pLevel.isClientSide());
@@ -84,6 +97,51 @@ public abstract class StargateAbstractBaseBlock extends RotatableBlock implement
         BlockEntity blockentity = p_49235_.getBlockEntity(p_49236_);
         return blockentity instanceof MenuProvider ? (MenuProvider)blockentity : null;
     }
+
+
+    protected boolean tryAutobuild(Player player, Level world, BlockPos basePos, InteractionHand hand) {
+        final StargateAbstractBaseTile gateTile = (StargateAbstractBaseTile) world.getBlockEntity(basePos);
+        final Direction facing = world.getBlockState(basePos).getValue(FACING);
+
+        StargateAbstractMergeHelper mergeHelper = gateTile.getMergeHelper();
+        ItemStack stack = player.getItemInHand(hand);
+
+        if (!gateTile.isMerged) {
+
+            // This check ensures that stack represents matching member block.
+            int memberVariant = mergeHelper.getMemberVariantFromItemStack(stack);
+
+            if (memberVariant != -1) {
+                boolean chevron = (memberVariant == 1);
+
+                List<BlockPos> posList = mergeHelper.getAbsentBlockPositions(world, basePos, facing, chevron);
+
+                if (!posList.isEmpty()) {
+                    BlockPos pos = posList.get(0);
+
+                    if (world.getBlockState(pos).isAir()) {
+                        BlockState memberState = mergeHelper.getMemberBlock(chevron).defaultBlockState();
+                        world.setBlock(pos, createMemberState(memberState, facing), 11);
+
+                        SoundType soundtype = memberState.getBlock().getSoundType(memberState, world, pos, player);
+                        world.playSound(null, pos, soundtype.getBreakSound(), SoundSource.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
+
+                        if (!player.isCreative()) stack.shrink(1);
+
+                        // If it was the last chevron/ring
+                        if (posList.size() == 1)
+                            gateTile.updateMergeState(gateTile.getMergeHelper().checkBlocks(world, basePos, facing), facing);
+
+                        return true;
+                    }
+                }
+            } // variant == null, wrong block held
+        }
+
+        return false;
+    }
+
+    protected abstract BlockState createMemberState(BlockState memberState, Direction facing);
 
 
 }

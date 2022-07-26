@@ -1,7 +1,9 @@
 package dev.tauri.jsgmilkyway.tileentity;
 
+import dev.tauri.jsgcore.stargate.merging.StargateAbstractMergeHelper;
 import dev.tauri.jsgcore.tileentity.StargateClassicBaseTile;
 import dev.tauri.jsgcore.utils.BiomeOverlayEnum;
+import dev.tauri.jsgmilkyway.stargate.merging.StargateMilkyWayMergeHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -17,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 import static dev.tauri.jsgmilkyway.JSGMilkyWay.MOD_ID;
 
 public class StargateMilkyWayBaseTile extends StargateClassicBaseTile {
+    public final StargateAbstractMergeHelper MERGE_HELPER = new StargateMilkyWayMergeHelper();
     public static final BiomeOverlayEnum[] ALLOWED_OVERLAYS = {
             BiomeOverlayEnum.NORMAL,
             BiomeOverlayEnum.AGED,
@@ -48,5 +51,9 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile {
     @Override
     public AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
         return super.m_7208_(p_39954_, p_39955_, p_39956_);
+    }
+
+    public StargateAbstractMergeHelper getMergeHelper(){
+        return MERGE_HELPER;
     }
 }

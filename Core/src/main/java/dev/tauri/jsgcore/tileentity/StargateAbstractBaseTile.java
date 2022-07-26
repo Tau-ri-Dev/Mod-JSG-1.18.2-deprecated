@@ -1,6 +1,7 @@
 package dev.tauri.jsgcore.tileentity;
 
 import dev.tauri.jsgcore.screen.stargate.StargateMenu;
+import dev.tauri.jsgcore.stargate.merging.StargateAbstractMergeHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -25,6 +26,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+
+import static dev.tauri.jsgcore.block.stargate.base.StargateAbstractBaseBlock.MERGED;
 
 public abstract class StargateAbstractBaseTile extends BlockEntity implements MenuProvider {
 
@@ -129,4 +132,37 @@ public abstract class StargateAbstractBaseTile extends BlockEntity implements Me
 
     public abstract int getSupportedCapacitors();
     public abstract boolean canUseAsOverlay(ItemStack stack);
+    public abstract StargateAbstractMergeHelper getMergeHelper();
+
+    public final void updateMergeState(boolean shouldBeMerged, Direction facing) {
+        if (!shouldBeMerged) {
+            if (isMerged) onBreak();
+
+            /*if (stargateState.engaged()) {
+                targetGatePos.getTileEntity().closeGate(StargateClosedReasonEnum.CONNECTION_LOST);
+            }*/
+        } else {
+            onMerge();
+        }
+
+        if (this.isMerged == shouldBeMerged) {
+            if (shouldBeMerged) {
+                getMergeHelper().updateMembersBasePos(level, worldPosition, facing);
+            }
+            return;
+        }
+
+        this.isMerged = shouldBeMerged;
+        if(level == null) return;
+        BlockState actualState = level.getBlockState(worldPosition);
+
+        // When the block is destroyed, there will be air in this place and we cannot set its block state
+        if (getMergeHelper().matchBase(actualState)) {
+            level.setBlock(worldPosition, actualState.setValue(MERGED, !shouldBeMerged), 2);
+        }
+
+        getMergeHelper().updateMembersMergeStatus(level, worldPosition, facing, shouldBeMerged);
+
+        setChanged();
+    }
 }

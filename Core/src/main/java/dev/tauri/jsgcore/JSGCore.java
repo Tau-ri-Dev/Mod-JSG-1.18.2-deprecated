@@ -49,30 +49,8 @@ public class JSGCore{
 
     public JSGCore() {
         IEventBus eb = FMLJavaModLoadingContext.get().getModEventBus();
-        setUpAddonsCount();
-
-        ScreenTypes.load();
-
-        // registry
-        SCREEN_REGISTRY.register(eb);
-
-        eb.addListener(this::commonSetup);
-        eb.addListener(this::clientSetup);
-
+        ModLoading.loadMod(eb);
         MinecraftForge.EVENT_BUS.register(this);
-    }
-
-    private void commonSetup(final FMLCommonSetupEvent event) {
-        for(AbstractConfigFile c : configFiles){
-            c.init();
-            ModLoadingContext.get().registerConfig(c.type, c.config);
-            c.load();
-        }
-        System.out.println("Registered!");
-    }
-
-    private void clientSetup(final FMLClientSetupEvent event) {
-        MenuScreens.register(ScreenTypes.STARGATE_MENU.get(), StargateScreen::new);
     }
 
     @SubscribeEvent
@@ -115,16 +93,6 @@ public class JSGCore{
             if (!event.getWorld().isClientSide()) {
                 Logging.debug("Saving sg network...");
                 StargateNetworkFile.save(overworld, StargateNetworkFile.NETWORK);
-            }
-        }
-    }
-
-    private void setUpAddonsCount(){
-        List<ModInfo> list = FMLLoader.getLoadingModList().getMods();
-        for(ModInfo modInfo : list){
-            String id = modInfo.getModId();
-            if(id.startsWith(MOD_BASE_ID) && !(id.equals(MOD_ID))){
-                INSTALLED_ADDONS++;
             }
         }
     }

@@ -1,4 +1,4 @@
-package dev.tauri.jsgmilkyway.utils;
+package dev.tauri.jsgcore.utils;
 
 import com.google.common.base.Predicate;
 import net.minecraft.world.level.block.Block;

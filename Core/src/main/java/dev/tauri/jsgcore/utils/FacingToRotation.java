@@ -1,7 +1,10 @@
 package dev.tauri.jsgcore.utils;
 
 import com.mojang.math.Quaternion;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.data.models.blockstates.VariantProperties;
+import net.minecraft.world.level.block.Rotation;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,5 +20,23 @@ public class FacingToRotation {
 	
 	public static Quaternion get(Direction facing) {
 		return ROTATION_MAP.get(facing);
+	}
+
+	public static BlockPos rotatePos(BlockPos pos, Direction rotation) {
+		switch(rotation) {
+			case NORTH:
+			default:
+				return pos;
+			case EAST:
+				return new BlockPos(-pos.getZ(), pos.getY(), pos.getX());
+			case SOUTH:
+				return new BlockPos(-pos.getX(), pos.getY(), -pos.getZ());
+			case WEST:
+				return new BlockPos(pos.getZ(), pos.getY(), -pos.getX());
+			case UP:
+				return new BlockPos(pos.getX(), pos.getZ(), pos.getY());
+			case DOWN:
+				return new BlockPos(pos.getX(), pos.getZ(), -pos.getY());
+		}
 	}
 }
