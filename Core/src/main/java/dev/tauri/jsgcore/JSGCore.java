@@ -3,6 +3,8 @@ package dev.tauri.jsgcore;
 import dev.tauri.jsgcore.commands.InfoCommand;
 import dev.tauri.jsgcore.commands.TestCommand;
 import dev.tauri.jsgcore.config.AbstractConfigFile;
+import dev.tauri.jsgcore.loader.model.ModelLoader;
+import dev.tauri.jsgcore.loader.texture.TextureLoader;
 import dev.tauri.jsgcore.registry.CommandRegistry;
 import dev.tauri.jsgcore.screen.ScreenRegistry;
 import dev.tauri.jsgcore.screen.ScreenTypes;
@@ -10,6 +12,7 @@ import dev.tauri.jsgcore.screen.stargate.StargateScreen;
 import dev.tauri.jsgcore.stargate.network.StargateNetworkFile;
 import dev.tauri.jsgcore.utils.Logging;
 import dev.tauri.jsgcore.utils.ModLoading;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -41,11 +44,12 @@ public class JSGCore{
 
     public static final String MOD_BASE_ID = "jsg";
     public static final String MOD_ID = MOD_BASE_ID + "_@MODID@";
-    //public static final String MOD_NAME = "Just Stargate Mod: @MODNAME@";
 
-    //public static final ModLoading MOD_LOADER = new ModLoading();
     public static final CommandRegistry COMMAND_REGISTRY = new CommandRegistry();
     public static final ScreenRegistry SCREEN_REGISTRY = new ScreenRegistry(MOD_ID);
+
+    public static final ModelLoader MODEL_LOADER = new ModelLoader(MOD_ID, JSGCore.class);
+    public static final TextureLoader TEXTURE_LOADER = new TextureLoader(MOD_ID, JSGCore.class);
 
     public JSGCore() {
         IEventBus eb = FMLJavaModLoadingContext.get().getModEventBus();
@@ -68,6 +72,8 @@ public class JSGCore{
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
+            MODEL_LOADER.loadModels();
+            TEXTURE_LOADER.loadTextures();
         }
     }
 

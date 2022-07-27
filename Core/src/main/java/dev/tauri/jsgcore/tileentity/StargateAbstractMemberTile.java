@@ -66,9 +66,6 @@ public abstract class StargateAbstractMemberTile extends BlockEntity {
         this.isMerged = merged;
         if(level != null && !level.getBlockState(worldPosition).isAir() && !level.isClientSide()) {
             level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(MERGED, merged), 11);
-            /*if(merged)
-                Logging.debug("Member: Merged!!");
-            Logging.info("Member: Unmerged!!");*/
         }
         setChanged();
     }

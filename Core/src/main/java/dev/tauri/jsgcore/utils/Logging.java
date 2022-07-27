@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 public class Logging {
     private static final Logger LOGGER = LogUtils.getLogger();
     public static void info(String s) {
-        LOGGER.info(s);
+        LOGGER.info("JSG: " + s);
     }
 
     public static void error(String s) {
