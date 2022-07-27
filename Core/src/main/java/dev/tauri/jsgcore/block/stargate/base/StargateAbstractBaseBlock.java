@@ -13,6 +13,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -31,7 +32,7 @@ import static dev.tauri.jsgcore.block.stargate.StargateAbstractMemberBlock.MERGE
 public abstract class StargateAbstractBaseBlock extends RotatableBlock implements EntityBlock {
     public StargateAbstractBaseBlock(Properties properties) {
         super(properties.explosionResistance(60f).requiresCorrectToolForDrops().noOcclusion());
-        registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(MERGED, true));
+        registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(MERGED, Boolean.FALSE));
     }
 
     @Override
@@ -54,16 +55,27 @@ public abstract class StargateAbstractBaseBlock extends RotatableBlock implement
     }
 
     @Override
+    public boolean propagatesSkylightDown(@NotNull BlockState blockState, @NotNull BlockGetter blockGetter, @NotNull BlockPos blockPos) {
+        return blockState.getValue(MERGED);
+    }
+
+    @Override
+    public float getShadeBrightness(@NotNull BlockState blockState, @NotNull BlockGetter blockGetter, @NotNull BlockPos blockPos) {
+        return 0.7F;
+    }
+
+    @Override
     public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level pLevel, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit){
         if(!pLevel.isClientSide()){
             BlockEntity entity = pLevel.getBlockEntity(pos);
             if(entity instanceof StargateAbstractBaseTile){
-                if (!player.isShiftKeyDown() && !tryAutobuild(player, pLevel, pos, hand)) {
+                if (!player.isShiftKeyDown() && !tryAutobuild(player, pLevel, pos, hand) && state.getValue(MERGED)) {
                     NetworkHooks.openGui(((ServerPlayer) player), ((StargateAbstractBaseTile) entity), pos);
+                    return InteractionResult.sidedSuccess(true);
                 }
             }
         }
-        return InteractionResult.sidedSuccess(pLevel.isClientSide());
+        return InteractionResult.sidedSuccess(false);
     }
 
     @Override

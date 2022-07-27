@@ -1,12 +1,15 @@
 package dev.tauri.jsgcore.tileentity;
 
 import dev.tauri.jsgcore.block.stargate.StargateAbstractMemberBlock;
+import dev.tauri.jsgcore.block.stargate.base.StargateAbstractBaseBlock;
 import dev.tauri.jsgcore.block.stargate.chevron.StargateAbstractChevronBlock;
 import dev.tauri.jsgcore.block.stargate.ring.StargateAbstractRingBlock;
 import dev.tauri.jsgcore.stargate.merging.StargateAbstractMergeHelper;
 import dev.tauri.jsgcore.utils.FacingToRotation;
+import dev.tauri.jsgcore.utils.Logging;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -58,16 +61,16 @@ public abstract class StargateAbstractMemberTile extends BlockEntity {
     }
 
     public void onBreak(){
-        setMerged(false);
-        StargateAbstractBaseTile baseTile = getBaseTile();
-        if(baseTile != null)
-            baseTile.onBreak();
     }
 
     public void setMerged(boolean merged){
         this.isMerged = merged;
         if(level != null && !level.getBlockState(worldPosition).isAir()) {
-            level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(MERGED, merged), 2);
+            if(level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(MERGED, merged), 11))
+                Logging.info("WTF");
+            if(merged)
+                Logging.info("Member: Merged!!");
+            Logging.info("Member: Unmerged!!");
         }
         setChanged();
     }

@@ -2,7 +2,9 @@ package dev.tauri.jsgcore.utils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.ArrayList;
 
@@ -49,6 +51,10 @@ public class JSGAxisBox {
         this.z2 += pos.getZ();
 
         return this;
+    }
+
+    public VoxelShape toVoxelShape(){
+        return Block.box(Math.min(x1, x2), Math.min(y1, y2), Math.min(z1, z2), Math.max(x1, x2), Math.max(y1, y2), Math.max(z1, z2));
     }
 
     public ArrayList<BlockPos> getPositions(){

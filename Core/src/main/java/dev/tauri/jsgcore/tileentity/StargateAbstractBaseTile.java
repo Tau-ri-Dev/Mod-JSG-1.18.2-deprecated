@@ -1,7 +1,8 @@
 package dev.tauri.jsgcore.tileentity;
 
-import dev.tauri.jsgcore.block.stargate.StargateAbstractMemberBlock;
+import dev.tauri.jsgcore.block.stargate.base.StargateAbstractBaseBlock;
 import dev.tauri.jsgcore.screen.stargate.StargateMenu;
+import dev.tauri.jsgcore.stargate.state.StargateAbstractStateManager;
 import dev.tauri.jsgcore.stargate.merging.StargateAbstractMergeHelper;
 import dev.tauri.jsgcore.utils.FacingToRotation;
 import dev.tauri.jsgcore.utils.Logging;
@@ -30,8 +31,6 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 
-import java.util.Objects;
-
 import static dev.tauri.jsgcore.block.RotatableBlock.FACING;
 import static dev.tauri.jsgcore.block.stargate.StargateAbstractMemberBlock.MERGED;
 
@@ -40,6 +39,8 @@ public abstract class StargateAbstractBaseTile extends BlockEntity implements Me
     public static final int STARGATE_CONTAINER_SIZE = 12;
 
     public boolean isMerged = false;
+    public Direction facing;
+    public final StargateAbstractStateManager stateManager;
     private final ItemStackHandler itemStackHandler = new ItemStackHandler(STARGATE_CONTAINER_SIZE){
         @Override
         protected void onContentsChanged(int slot) {
@@ -55,41 +56,63 @@ public abstract class StargateAbstractBaseTile extends BlockEntity implements Me
 
     public StargateAbstractBaseTile(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
         super(blockEntityType, blockPos, blockState);
+        stateManager = getStateManager();
     }
+
+    public abstract StargateAbstractStateManager getStateManager();
 
     public void onMerge(){
         isMerged = true;
-        if(level != null && !level.getBlockState(worldPosition).isAir())
-            level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(MERGED, Boolean.TRUE), 2);
+        if(level != null) {
+            if(!level.getBlockState(worldPosition).isAir()) {
+                level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(MERGED, Boolean.TRUE), 11);
+                Logging.info("Base: Merged!!");
+            }
+
+            for (BlockPos pos : getMergeHelper().getRingBlocks()) {
+                BlockPos newPos = FacingToRotation.rotatePos(pos, facing).offset(worldPosition);
+                BlockEntity tile = level.getBlockEntity(newPos);
+                if (tile != null)
+                    ((StargateAbstractMemberTile) tile).setMerged(true);
+            }
+            for (BlockPos pos : getMergeHelper().getChevronBlocks()) {
+                BlockPos newPos = FacingToRotation.rotatePos(pos, facing).offset(worldPosition);
+                BlockEntity tile = level.getBlockEntity(newPos);
+                if (tile != null)
+                    ((StargateAbstractMemberTile) tile).setMerged(true);
+            }
+        }
+        stateManager.onMerge();
         setChanged();
-        Logging.info("Merged!!");
     }
 
     public void onUnmerged(){
         isMerged = false;
         if(level != null) {
             if(!level.getBlockState(worldPosition).isAir()) {
-                level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(MERGED, Boolean.FALSE), 2);
-                for (BlockPos pos : getMergeHelper().getRingBlocks()) {
-                    BlockPos newPos = FacingToRotation.rotatePos(pos, level.getBlockState(worldPosition).getValue(FACING)).offset(worldPosition);
-                    BlockEntity tile = level.getBlockEntity(newPos);
-                    if (tile != null)
-                        ((StargateAbstractMemberTile) tile).setMerged(false);
-                }
-                for (BlockPos pos : getMergeHelper().getChevronBlocks()) {
-                    BlockPos newPos = FacingToRotation.rotatePos(pos, level.getBlockState(worldPosition).getValue(FACING)).offset(worldPosition);
-                    BlockEntity tile = level.getBlockEntity(newPos);
-                    if (tile != null)
-                        ((StargateAbstractMemberTile) tile).setMerged(false);
-                }
+                level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(MERGED, Boolean.FALSE), 11);
+                Logging.info("Base: Unmerged!!");
+            }
+
+            for (BlockPos pos : getMergeHelper().getRingBlocks()) {
+                BlockPos newPos = FacingToRotation.rotatePos(pos, facing).offset(worldPosition);
+                BlockEntity tile = level.getBlockEntity(newPos);
+                if (tile != null)
+                    ((StargateAbstractMemberTile) tile).setMerged(false);
+            }
+            for (BlockPos pos : getMergeHelper().getChevronBlocks()) {
+                BlockPos newPos = FacingToRotation.rotatePos(pos, facing).offset(worldPosition);
+                BlockEntity tile = level.getBlockEntity(newPos);
+                if (tile != null)
+                    ((StargateAbstractMemberTile) tile).setMerged(false);
             }
         }
+        stateManager.onUnmerge();
         setChanged();
-        Logging.info("Unmerged!!");
     }
 
     public void onBreak(){
-        onUnmerged();
+        updateMergeState(false, facing);
     }
 
     public BlockPos getPos(){
@@ -115,8 +138,28 @@ public abstract class StargateAbstractBaseTile extends BlockEntity implements Me
         lazyItemHandler.invalidate();
     }
 
-    public static <E extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, E e) {
+    public void refreshFacing(){
+        if(level != null){
+            BlockState base = level.getBlockState(worldPosition);
+            if(base.getBlock() instanceof StargateAbstractBaseBlock)
+                this.facing = base.getValue(FACING);
+        }
+    }
 
+    public void refreshMerged(){
+        if(level == null) return;
+        if(level.getBlockState(worldPosition).isAir()) return;
+
+        updateMergeState(getMergeHelper().checkBlocks(level, worldPosition, facing), facing);
+    }
+
+    public static <E extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, E e) {
+        StargateAbstractBaseTile tile = (StargateAbstractBaseTile) e;
+
+        tile.stateManager.tick();
+
+        tile.refreshFacing();
+        tile.refreshMerged();
     }
 
 
@@ -129,6 +172,8 @@ public abstract class StargateAbstractBaseTile extends BlockEntity implements Me
         super.load(compound);
         itemStackHandler.deserializeNBT(compound.getCompound("inventory"));
         isMerged = compound.getBoolean("merged");
+
+        stateManager.fromNBT(compound.getCompound("stateManager"));
     }
 
     // save nbt
@@ -136,6 +181,8 @@ public abstract class StargateAbstractBaseTile extends BlockEntity implements Me
     protected void saveAdditional(@NotNull CompoundTag compound) {
         compound.put("inventory", itemStackHandler.serializeNBT());
         compound.putBoolean("merged", isMerged);
+
+        compound.put("stateManager", stateManager.toNBT());
         super.saveAdditional(compound);
     }
 
@@ -169,12 +216,12 @@ public abstract class StargateAbstractBaseTile extends BlockEntity implements Me
 
     public final void updateMergeState(boolean shouldBeMerged, Direction facing) {
         if (!shouldBeMerged) {
-            if (isMerged) onBreak();
+            if (isMerged) onUnmerged();
 
             /*if (stargateState.engaged()) {
                 targetGatePos.getTileEntity().closeGate(StargateClosedReasonEnum.CONNECTION_LOST);
             }*/
-        } else {
+        } else if(!isMerged){
             onMerge();
         }
 

@@ -38,7 +38,7 @@ public abstract class StargateClassicMergeHelper extends StargateAbstractMergeHe
 
                 // This also sets merge status
                 memberTile.setBasePos(shouldBeMerged ? basePos : null);
-                memberTile.setMerged(!shouldBeMerged);
+                memberTile.setMerged(shouldBeMerged);
             }
         }
     }

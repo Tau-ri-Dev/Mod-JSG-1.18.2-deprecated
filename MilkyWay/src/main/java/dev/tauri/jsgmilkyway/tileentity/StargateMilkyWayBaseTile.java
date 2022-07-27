@@ -4,6 +4,7 @@ import dev.tauri.jsgcore.stargate.merging.StargateAbstractMergeHelper;
 import dev.tauri.jsgcore.tileentity.StargateClassicBaseTile;
 import dev.tauri.jsgcore.utils.BiomeOverlayEnum;
 import dev.tauri.jsgmilkyway.stargate.merging.StargateMilkyWayMergeHelper;
+import dev.tauri.jsgmilkyway.stargate.state.StargateMilkyWayStateManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -30,6 +31,10 @@ public class StargateMilkyWayBaseTile extends StargateClassicBaseTile {
 
     public StargateMilkyWayBaseTile(BlockPos blockPos, BlockState blockState) {
         super(TileEntityRegistry.SG_MILKYWAY_BASE_TILE.get(), blockPos, blockState);
+    }
+
+    public StargateAbstractStateManager getStateManager(){
+        return new StargateMilkyWayStateManager(this);
     }
 
     @Override

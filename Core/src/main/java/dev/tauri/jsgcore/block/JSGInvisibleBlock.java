@@ -2,12 +2,13 @@ package dev.tauri.jsgcore.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.BarrierBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
-public class JSGInvisibleBlock extends Block {
+public class JSGInvisibleBlock extends BarrierBlock {
     public JSGInvisibleBlock(Properties properties) {
         super(properties);
     }

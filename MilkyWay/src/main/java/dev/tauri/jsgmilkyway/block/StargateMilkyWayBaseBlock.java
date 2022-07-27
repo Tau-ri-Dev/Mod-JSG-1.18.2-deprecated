@@ -47,15 +47,4 @@ public class StargateMilkyWayBaseBlock extends StargateClassicBaseBlock {
     protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> createTickerHelper(BlockEntityType<A> p_152133_, BlockEntityType<E> p_152134_, BlockEntityTicker<? super E> p_152135_) {
         return p_152134_ == p_152133_ ? ((BlockEntityTicker<A>)p_152135_) : null;
     }
-
-    @Override
-    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level pLevel, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit){
-        /*if(!pLevel.isClientSide()){
-            BlockEntity tile = pLevel.getBlockEntity(pos);
-            if(tile instanceof StargateMilkyWayBaseTile){
-                ((StargateMilkyWayMergeHelper) ((StargateMilkyWayBaseTile) tile).getMergeHelper()).build(pLevel, pos);
-            }
-        }*/
-        return super.use(state, pLevel, pos, player, hand, hit);
-    }
 }
