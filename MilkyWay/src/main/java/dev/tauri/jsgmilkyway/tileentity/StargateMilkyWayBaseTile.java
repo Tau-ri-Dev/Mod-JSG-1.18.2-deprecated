@@ -1,6 +1,7 @@
 package dev.tauri.jsgmilkyway.tileentity;
 
 import dev.tauri.jsgcore.stargate.merging.StargateAbstractMergeHelper;
+import dev.tauri.jsgcore.stargate.state.StargateAbstractStateManager;
 import dev.tauri.jsgcore.tileentity.StargateClassicBaseTile;
 import dev.tauri.jsgcore.utils.BiomeOverlayEnum;
 import dev.tauri.jsgmilkyway.stargate.merging.StargateMilkyWayMergeHelper;

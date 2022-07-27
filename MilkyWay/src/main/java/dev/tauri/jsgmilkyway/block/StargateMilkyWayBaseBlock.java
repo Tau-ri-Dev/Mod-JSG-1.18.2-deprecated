@@ -24,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
 public class StargateMilkyWayBaseBlock extends StargateClassicBaseBlock {
 
     public StargateMilkyWayBaseBlock() {
-        super(BlockBehaviour.Properties.of(Material.METAL).strength(6f));
+        super(BlockBehaviour.Properties.of(Material.METAL).strength(3f));
     }
 
     @Nullable

@@ -1,35 +1,31 @@
 package dev.tauri.jsgcore.tileentity;
 
 import dev.tauri.jsgcore.block.stargate.StargateAbstractMemberBlock;
-import dev.tauri.jsgcore.block.stargate.base.StargateAbstractBaseBlock;
 import dev.tauri.jsgcore.block.stargate.chevron.StargateAbstractChevronBlock;
 import dev.tauri.jsgcore.block.stargate.ring.StargateAbstractRingBlock;
 import dev.tauri.jsgcore.stargate.merging.StargateAbstractMergeHelper;
-import dev.tauri.jsgcore.utils.FacingToRotation;
-import dev.tauri.jsgcore.utils.Logging;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 import static dev.tauri.jsgcore.block.RotatableBlock.FACING;
 import static dev.tauri.jsgcore.block.stargate.StargateAbstractMemberBlock.MERGED;
 
 public abstract class StargateAbstractMemberTile extends BlockEntity {
     public boolean isMerged = false;
-
     public BlockPos basePos = null;
+    public final Direction facing;
 
     public final StargateAbstractMemberBlock memberBlockType;
 
     public StargateAbstractMemberTile(BlockPos blockPos, BlockState blockState) {
         super(((StargateAbstractMemberBlock) blockState.getBlock()).getRegisteredTile(), blockPos, blockState);
         memberBlockType = (StargateAbstractMemberBlock) blockState.getBlock();
+        facing = blockState.getValue(FACING);
         setChanged();
         getBaseTile();
     }
@@ -37,12 +33,10 @@ public abstract class StargateAbstractMemberTile extends BlockEntity {
     @Nullable
     public StargateAbstractBaseTile getBaseTile(){
         if(level == null) return null;
-        if(level.getBlockState(worldPosition).isAir()) return null;
-        StargateAbstractBaseTile baseTile = getMergeHelper().findBaseTile(level, worldPosition, level.getBlockState(worldPosition).getValue(FACING));
-        if(baseTile == null) return null;
-        // just in case that basePos was null
-        setBasePos(baseTile.getPos());
-        return baseTile;
+        if(getBasePos() == null) return null;
+        BlockEntity e = level.getBlockEntity(getBasePos());
+        if(!(e instanceof StargateAbstractBaseTile)) return null;
+        return (StargateAbstractBaseTile) e;
     }
 
     public abstract StargateAbstractChevronBlock getChevronBlock();
@@ -52,6 +46,11 @@ public abstract class StargateAbstractMemberTile extends BlockEntity {
 
     @Nullable
     public BlockPos getBasePos(){
+        if(basePos == null){
+            final StargateAbstractBaseTile tile = getMergeHelper().findBaseTile(level, worldPosition, facing);
+            if(tile != null)
+                basePos = tile.getPos();
+        }
         return basePos;
     }
 
@@ -65,12 +64,11 @@ public abstract class StargateAbstractMemberTile extends BlockEntity {
 
     public void setMerged(boolean merged){
         this.isMerged = merged;
-        if(level != null && !level.getBlockState(worldPosition).isAir()) {
-            if(level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(MERGED, merged), 11))
-                Logging.info("WTF");
-            if(merged)
-                Logging.info("Member: Merged!!");
-            Logging.info("Member: Unmerged!!");
+        if(level != null && !level.getBlockState(worldPosition).isAir() && !level.isClientSide()) {
+            level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(MERGED, merged), 11);
+            /*if(merged)
+                Logging.debug("Member: Merged!!");
+            Logging.info("Member: Unmerged!!");*/
         }
         setChanged();
     }

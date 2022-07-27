@@ -63,10 +63,11 @@ public abstract class StargateAbstractBaseTile extends BlockEntity implements Me
 
     public void onMerge(){
         isMerged = true;
+        refreshFacing();
         if(level != null) {
             if(!level.getBlockState(worldPosition).isAir()) {
                 level.setBlock(worldPosition, level.getBlockState(worldPosition).setValue(MERGED, Boolean.TRUE), 11);
-                Logging.info("Base: Merged!!");
+                //Logging.info("Base: Merged!!");
             }
 
             for (BlockPos pos : getMergeHelper().getRingBlocks()) {
@@ -160,6 +161,7 @@ public abstract class StargateAbstractBaseTile extends BlockEntity implements Me
 
         tile.refreshFacing();
         tile.refreshMerged();
+        tile.getMergeHelper().updateMembersBasePos(tile.level, tile.getPos(), tile.facing);
     }
 
 

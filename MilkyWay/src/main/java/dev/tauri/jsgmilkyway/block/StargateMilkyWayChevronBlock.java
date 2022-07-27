@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 public class StargateMilkyWayChevronBlock extends StargateClassicChevronBlock {
 
     public StargateMilkyWayChevronBlock() {
-        super(BlockBehaviour.Properties.of(Material.METAL).strength(6f));
+        super(BlockBehaviour.Properties.of(Material.METAL).strength(3f));
     }
 
     @Nullable

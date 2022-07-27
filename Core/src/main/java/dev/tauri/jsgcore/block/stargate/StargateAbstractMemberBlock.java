@@ -1,10 +1,12 @@
 package dev.tauri.jsgcore.block.stargate;
 
 import dev.tauri.jsgcore.block.RotatableBlock;
+import dev.tauri.jsgcore.block.stargate.base.StargateAbstractBaseBlock;
 import dev.tauri.jsgcore.tileentity.StargateAbstractBaseTile;
 import dev.tauri.jsgcore.tileentity.StargateAbstractMemberTile;
 import dev.tauri.jsgcore.utils.FacingToRotation;
 import dev.tauri.jsgcore.utils.JSGAxisBox;
+import dev.tauri.jsgcore.utils.Logging;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,7 +29,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.network.NetworkHooks;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 
@@ -84,12 +85,16 @@ public abstract class StargateAbstractMemberBlock extends RotatableBlock impleme
         if(!pLevel.isClientSide()){
             BlockEntity entity = pLevel.getBlockEntity(pos);
             if(entity instanceof StargateAbstractMemberTile){
-                final BlockPos basePos = ((StargateAbstractMemberTile) entity).getBasePos();
-                if(basePos != null)
-                    return pLevel.getBlockState(basePos).use(pLevel, player, hand, hit);
+                final StargateAbstractBaseTile gateTile = ((StargateAbstractMemberTile) entity).getBaseTile();
+                if(gateTile != null) {
+                    final BlockPos basePos = gateTile.getPos();
+                    if (basePos != null) {
+                        return ((StargateAbstractBaseBlock) pLevel.getBlockState(basePos).getBlock()).showGateInfo(player, pLevel, gateTile, basePos, hand, state);
+                    }
+                }
             }
         }
-        return InteractionResult.sidedSuccess(false);
+        return InteractionResult.PASS;
     }
 
     @Override
@@ -129,9 +134,4 @@ public abstract class StargateAbstractMemberBlock extends RotatableBlock impleme
     }
 
     public abstract BlockEntityType getRegisteredTile();
-
-    /*@Override
-    public boolean skipRendering(@NotNull BlockState blockState, @NotNull BlockState blockState1, @NotNull Direction direction) {
-        return blockState.getValue(MERGED);
-    }*/
 }

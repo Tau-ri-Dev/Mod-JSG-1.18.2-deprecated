@@ -3,6 +3,7 @@ package dev.tauri.jsgcore.block.stargate.base;
 import dev.tauri.jsgcore.block.RotatableBlock;
 import dev.tauri.jsgcore.stargate.merging.StargateAbstractMergeHelper;
 import dev.tauri.jsgcore.tileentity.StargateAbstractBaseTile;
+import dev.tauri.jsgcore.utils.JSGAxisBox;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,6 +21,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
@@ -65,17 +69,40 @@ public abstract class StargateAbstractBaseBlock extends RotatableBlock implement
     }
 
     @Override
+    public @NotNull VoxelShape getShape(@NotNull BlockState blockState, @NotNull BlockGetter blockGetter, @NotNull BlockPos blockPos, @NotNull CollisionContext collisionContext) {
+        final boolean isMerged = blockState.getValue(MERGED);
+        final Direction facing = blockState.getValue(FACING);
+        if(isMerged){
+            JSGAxisBox box = new JSGAxisBox(16, 16, 14, 0, 0, 2);
+            if(facing == Direction.UP || facing == Direction.DOWN)
+                box = new JSGAxisBox(16, 14, 16, 0, 2, 0);
+            if(facing == Direction.EAST || facing == Direction.WEST)
+                box = new JSGAxisBox(14, 16, 16, 2, 0, 0);
+            return box.toVoxelShape();
+        }
+        return Shapes.block();
+    }
+
+    @Override
     public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level pLevel, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit){
         if(!pLevel.isClientSide()){
             BlockEntity entity = pLevel.getBlockEntity(pos);
             if(entity instanceof StargateAbstractBaseTile){
-                if (!player.isShiftKeyDown() && !tryAutobuild(player, pLevel, pos, hand) && state.getValue(MERGED)) {
-                    NetworkHooks.openGui(((ServerPlayer) player), ((StargateAbstractBaseTile) entity), pos);
+                if(!tryAutobuild(player, pLevel, pos, hand))
+                    return showGateInfo(player, pLevel, (StargateAbstractBaseTile) entity, pos, hand, state);
+                else
                     return InteractionResult.sidedSuccess(true);
-                }
             }
         }
-        return InteractionResult.sidedSuccess(false);
+        return InteractionResult.PASS;
+    }
+
+    public InteractionResult showGateInfo(Player player, Level level, StargateAbstractBaseTile tile, BlockPos pos, InteractionHand hand, BlockState state){
+        if (!player.isShiftKeyDown() && state.getValue(MERGED)) {
+            NetworkHooks.openGui(((ServerPlayer) player), tile, pos);
+            return InteractionResult.sidedSuccess(true);
+        }
+        return InteractionResult.PASS;
     }
 
     @Override

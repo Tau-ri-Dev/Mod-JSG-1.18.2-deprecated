@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 public class StargateMilkyWayRingBlock extends StargateClassicRingBlock {
 
     public StargateMilkyWayRingBlock() {
-        super(Properties.of(Material.METAL).strength(6f));
+        super(Properties.of(Material.METAL).strength(3f));
     }
 
     @Nullable
