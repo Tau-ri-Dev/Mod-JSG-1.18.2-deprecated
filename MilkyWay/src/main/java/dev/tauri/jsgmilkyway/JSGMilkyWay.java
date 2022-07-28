@@ -2,6 +2,8 @@ package dev.tauri.jsgmilkyway;
 
 import com.mojang.logging.LogUtils;
 import dev.tauri.jsgcore.config.files.JSGServerConfig;
+import dev.tauri.jsgcore.loader.model.ModelLoader;
+import dev.tauri.jsgcore.loader.texture.TextureLoader;
 import dev.tauri.jsgcore.registry.CommandRegistry;
 import dev.tauri.jsgcore.stargate.symbols.SymbolsRegistry;
 import dev.tauri.jsgmilkyway.block.MilkyWayBlocks;
@@ -36,6 +38,9 @@ public class JSGMilkyWay {
     public static final String MOD_ID = BASE_ID + "_@MODID@";
     public static final String MOD_NAME = "Just Stargate Mod: @MODNAME@";
     public static final Logger LOGGER = LogUtils.getLogger();
+
+    public static final ModelLoader MODEL_LOADER = new ModelLoader(MOD_ID, JSGMilkyWay.class);
+    public static final TextureLoader TEXTURE_LOADER = new TextureLoader(MOD_ID, JSGMilkyWay.class);
 
 
     public static final CommandRegistry COMMAND_REGISTRY = new CommandRegistry();
@@ -74,6 +79,8 @@ public class JSGMilkyWay {
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
+            MODEL_LOADER.loadModels();
+            TEXTURE_LOADER.loadTextures();
         }
     }
 }

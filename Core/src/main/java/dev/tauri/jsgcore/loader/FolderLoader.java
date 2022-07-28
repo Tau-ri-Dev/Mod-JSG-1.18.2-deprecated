@@ -1,7 +1,5 @@
 package dev.tauri.jsgcore.loader;
 
-import dev.tauri.jsgcore.utils.Logging;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,18 +16,18 @@ public class FolderLoader {
     List<String> out = new ArrayList<>();
 
     String classPath = clazz.getProtectionDomain().getCodeSource().getLocation().getPath();
-    Logging.info(String.format("classPath was '%s'.", classPath));
+    //Logging.info(String.format("classPath was '%s'.", classPath));
 
-    classPath = classPath.replaceAll("%20", " ").replaceAll("%2352", "");
+    classPath = classPath.replaceAll("%20", " ").replaceAll("%\\d*", "");
 
-    Logging.info(String.format("classPath is  '%s'.", classPath));
+    //Logging.info(String.format("classPath is  '%s'.", classPath));
 
     int separatorIndex = classPath.indexOf("!");
 
     // Separator found, we're inside a JAR file.
     if (separatorIndex != -1) {
       classPath = classPath.substring(0, separatorIndex);
-      Logging.info(classPath);
+      //Logging.info(classPath);
 
       JarFile jar = new JarFile(classPath);
       Enumeration<JarEntry> entries = jar.entries();

@@ -19,6 +19,7 @@ public class ModelLoader {
 		this.modId = modId;
 		this.modMainClass = modMainClass;
 		this.modelsPath = "assets/" + modId + "/models/tesr";
+		Logging.info("Created ModelLoader for domain " + modId);
 	}
 	
 	public OBJModel getModel(ResourceLocation resourceLocation) {
@@ -33,14 +34,15 @@ public class ModelLoader {
 
 			long start = System.currentTimeMillis();
 
-			Logging.info("Started loading models...");
+			Logging.info("Started loading models for domain " + modId + "...");
 			for (String modelPath : modelPaths) {
-				Logging.info("Loading model: " + modelPath);
+				Logging.info("Loading model: " + modelPath + " for domain " + modId);
 				String modelResourcePath = modelPath.replaceFirst("assets/" + modId + "/", "");
 				LOADED_MODELS.put(new ResourceLocation(modId, modelResourcePath), OBJLoader.loadModel(modelPath));
+				Logging.info("Model " + modelPath + " for domain " + modId + " loaded!");
 			}
 
-			Logging.info("Loaded " + modelPaths.size() + " models in " + (System.currentTimeMillis() - start) + " ms");
+			Logging.info("Loaded " + modelPaths.size() + " models for domain " + modId + " in " + (System.currentTimeMillis() - start) + " ms");
 		}
 		catch (Exception e){
 			Logging.error("Error while loading models for mod " + modMainClass.toString());

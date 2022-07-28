@@ -20,7 +20,6 @@ import java.awt.image.BufferedImage;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +36,7 @@ public class TextureLoader {
 		this.modId = modId;
 		this.modMainClass = modMainClass;
 		this.texturesPath = "assets/" + modId + "/textures/tesr";
+		Logging.info("Created TextureLoader for domain " + modId);
 	}
 	
 	public Texture getTexture(ResourceLocation resourceLocation) {
@@ -57,7 +57,7 @@ public class TextureLoader {
 
 			long start = System.currentTimeMillis();
 
-			Logging.info("Started loading textures...");
+			Logging.info("Started loading textures for domain " + modId + "...");
 
 			for (String texturePath : texturePaths) {
 				texturePath = texturePath.replaceFirst("assets/" + modId + "/", "");
@@ -66,13 +66,11 @@ public class TextureLoader {
 				Resource resource = null;
 
 				try {
-					Logging.info("Loading texture: " + texturePath);
+					Logging.info("Loading texture: " + texturePath + " for domain " + modId);
 					resource = resourceManager.getResource(resourceLocation);
-					Logging.info("L1");
 					BufferedImage bufferedImage = readBufferedImage(resource.getInputStream());
-					Logging.info("L2");
-					LOADED_TEXTURES.put(resourceLocation, new Texture(bufferedImage, false));
-					Logging.info("L3");
+					LOADED_TEXTURES.put(resourceLocation, new Texture(bufferedImage));
+					Logging.info("Texture " + texturePath + " for domain " + modId + " loaded!");
 				} catch (IOException e) {
 					Logging.error("Failed to load texture " + texturePath);
 					e.printStackTrace();
@@ -81,7 +79,7 @@ public class TextureLoader {
 				}
 			}
 
-			Logging.info("Loaded " + texturePaths.size() + " textures in " + (System.currentTimeMillis() - start) + " ms");
+			Logging.info("Loaded " + texturePaths.size() + " textures for domain " + modId + " in " + (System.currentTimeMillis() - start) + " ms");
 		}
 		catch (Exception ignored){}
 	}
