@@ -9,15 +9,15 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import java.util.ArrayList;
 
 public class JSGAxisBox {
-    private int x1;
-    private int y1;
-    private int z1;
+    private double x1;
+    private double y1;
+    private double z1;
 
-    private int x2;
-    private int y2;
-    private int z2;
+    private double x2;
+    private double y2;
+    private double z2;
 
-    public JSGAxisBox(int x1, int y1, int z1, int x2, int y2, int z2){
+    public JSGAxisBox(double x1, double y1, double z1, double x2, double y2, double z2){
         this.x1 = x1;
         this.y1 = y1;
         this.z1 = z1;
@@ -60,17 +60,17 @@ public class JSGAxisBox {
     public ArrayList<BlockPos> getPositions(){
         ArrayList<BlockPos> positions = new ArrayList<>();
 
-        int minX = Math.min(x1, x2);
-        int minY = Math.min(y1, y2);
-        int minZ = Math.min(z1, z2);
+        double minX = Math.min(x1, x2);
+        double minY = Math.min(y1, y2);
+        double minZ = Math.min(z1, z2);
 
-        int maxX = Math.max(x1, x2);
-        int maxY = Math.max(y1, y2);
-        int maxZ = Math.max(z1, z2);
+        double maxX = Math.max(x1, x2);
+        double maxY = Math.max(y1, y2);
+        double maxZ = Math.max(z1, z2);
 
-        for(int x = minX; x <= maxX; x++){
-            for(int y = minY; y <= maxY; y++){
-                for(int z = minZ; z <= maxZ; z++){
+        for(double x = minX; x <= maxX; x++){
+            for(double y = minY; y <= maxY; y++){
+                for(double z = minZ; z <= maxZ; z++){
                     positions.add(new BlockPos(x, y ,z));
                 }
             }

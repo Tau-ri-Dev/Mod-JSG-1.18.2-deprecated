@@ -13,7 +13,7 @@ public class SymbolsRegistry {
     @Nullable
     public static AbstractSymbolsManager managerBySymbolType(String typeName){
         for(AbstractSymbolsManager manager : REGISTRY){
-            if(manager.getSymbolType().getName().equalsIgnoreCase(typeName))
+            if(manager.getSymbolType().getName().equalsIgnoreCase(typeName) || manager.getSymbolType().getId().equalsIgnoreCase(typeName))
                 return manager;
         }
         return null;

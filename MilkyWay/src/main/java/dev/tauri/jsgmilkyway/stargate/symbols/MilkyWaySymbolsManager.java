@@ -27,6 +27,12 @@ public class MilkyWaySymbolsManager extends AbstractSymbolsManager {
         return null;
     }
 
+
+    @Override
+    public @Nullable SymbolInterface byId(int id) {
+        return SymbolMilkyWayEnum.byId(id);
+    }
+
     @Override
     public @NotNull SymbolInterface getRandomSymbol(Random random) {
         int id;

@@ -10,10 +10,13 @@ import dev.tauri.jsgmilkyway.block.MilkyWayBlocks;
 import dev.tauri.jsgmilkyway.commands.MWCommand;
 import dev.tauri.jsgmilkyway.config.MainConfig;
 import dev.tauri.jsgmilkyway.item.MilkyWayItems;
+import dev.tauri.jsgmilkyway.renderer.TESRRegistry;
 import dev.tauri.jsgmilkyway.stargate.symbols.MilkyWaySymbolsManager;
 import dev.tauri.jsgmilkyway.tileentity.TileEntityRegistry;
 import dev.tauri.jsgmilkyway.utils.Logging;
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -81,6 +84,7 @@ public class JSGMilkyWay {
         public static void onClientSetup(FMLClientSetupEvent event) {
             MODEL_LOADER.loadModels();
             TEXTURE_LOADER.loadTextures();
+            TESRRegistry.register();
         }
     }
 }

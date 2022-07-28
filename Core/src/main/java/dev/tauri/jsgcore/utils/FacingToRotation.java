@@ -40,4 +40,14 @@ public class FacingToRotation {
 				return new BlockPos(pos.getX(), pos.getZ(), -pos.getY());
 		}
 	}
+
+	public static float getHorizontal(Direction facing){
+		return facing.toYRot();
+	}
+
+	public static float getVertical(Direction facing){
+		if(facing == Direction.UP) return 90.0f;
+		if(facing == Direction.DOWN) return -90.0f;
+		return 0;
+	}
 }

@@ -1,10 +1,16 @@
 package dev.tauri.jsgmilkyway.stargate.symbols;
 
+import dev.tauri.jsgcore.stargate.symbols.AbstractSymbolType;
 import dev.tauri.jsgcore.stargate.symbols.SymbolInterface;
+import dev.tauri.jsgcore.stargate.symbols.SymbolsRegistry;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import java.util.Objects;
+
+import static dev.tauri.jsgmilkyway.JSGMilkyWay.MODEL_LOADER;
 import static dev.tauri.jsgmilkyway.JSGMilkyWay.MOD_ID;
 
 public enum SymbolMilkyWayEnum implements SymbolInterface {
@@ -54,15 +60,21 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
     ;
 
     public final String name;
+    public final String translationKey;
     public final int id;
     public final int angleIndex;
+    public final float angle;
     public final ResourceLocation model;
+
+    public static final float ANGLE_PER_GLYPH = 9.2307692f;
 
     SymbolMilkyWayEnum(int id, int angleIndex, String name, String model) {
         this.id = id;
         this.angleIndex = angleIndex;
+        this.angle = 360 - (angleIndex * ANGLE_PER_GLYPH);
         this.name = name;
-        this.model = new ResourceLocation(MOD_ID, model);
+        this.translationKey = "glyph.jsg.milkyway." + name.toLowerCase().replace(" ", "_");
+        this.model = MODEL_LOADER.getModelResource("symbols/" + model);
     }
 
     @Override
@@ -70,17 +82,45 @@ public enum SymbolMilkyWayEnum implements SymbolInterface {
         return name;
     }
 
-    public static @Nullable SymbolInterface byId(int id){
-        for(SymbolMilkyWayEnum symbol : SymbolMilkyWayEnum.values()){
-            if(symbol.id == id) return symbol;
-        }
-        return null;
+    @Override
+    public @NonNull int getId() {
+        return id;
     }
+
 
     public boolean isBrb(){
         return this.id == 40;
     }
     public boolean isOrigin(){
         return this.id == 50 || this.id == 51;
+    }
+
+    public float getAngle(){
+        return angle;
+    }
+    public int getAngleIndex(){
+        return angleIndex;
+    }
+
+    @Override
+    public String getEnglishName() {
+        return name;
+    }
+
+    public ResourceLocation getIconResource(){
+        return new ResourceLocation(MOD_ID, "textures/gui/symbols/" + name.toLowerCase() + ".png");
+    }
+    public String localize(){
+        return I18n.get(translationKey);
+    }
+    public AbstractSymbolType getSymbolType(){
+        return Objects.requireNonNull(SymbolsRegistry.managerBySymbolType("milkyway")).getSymbolType();
+    }
+
+    public static @Nullable SymbolInterface byId(int id){
+        for(SymbolMilkyWayEnum symbol : SymbolMilkyWayEnum.values()){
+            if(symbol.id == id) return symbol;
+        }
+        return null;
     }
 }

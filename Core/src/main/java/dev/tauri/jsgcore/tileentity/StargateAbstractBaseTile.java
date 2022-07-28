@@ -1,6 +1,8 @@
 package dev.tauri.jsgcore.tileentity;
 
 import dev.tauri.jsgcore.block.stargate.base.StargateAbstractBaseBlock;
+import dev.tauri.jsgcore.render.state.StargateAbstractRendererState;
+import dev.tauri.jsgcore.render.tesr.StargateAbstractRenderer;
 import dev.tauri.jsgcore.screen.stargate.StargateMenu;
 import dev.tauri.jsgcore.stargate.state.StargateAbstractStateManager;
 import dev.tauri.jsgcore.stargate.merging.StargateAbstractMergeHelper;
@@ -21,6 +23,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -41,6 +46,7 @@ public abstract class StargateAbstractBaseTile extends BlockEntity implements Me
     public boolean isMerged = false;
     public Direction facing;
     public final StargateAbstractStateManager stateManager;
+    public StargateAbstractRendererState rendererStateClient;
     private final ItemStackHandler itemStackHandler = new ItemStackHandler(STARGATE_CONTAINER_SIZE){
         @Override
         protected void onContentsChanged(int slot) {
@@ -60,6 +66,13 @@ public abstract class StargateAbstractBaseTile extends BlockEntity implements Me
     }
 
     public abstract StargateAbstractStateManager getStateManager();
+    public StargateAbstractRendererState getRendererStateClient(){
+        return rendererStateClient;
+    }
+
+    protected void setRendererStateClient(StargateAbstractRendererState rendererState) {
+        this.rendererStateClient = rendererState;
+    }
 
     public void onMerge(){
         isMerged = true;

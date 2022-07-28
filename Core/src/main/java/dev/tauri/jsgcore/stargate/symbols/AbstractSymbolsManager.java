@@ -12,6 +12,8 @@ public abstract class AbstractSymbolsManager {
     public abstract ArrayList<SymbolInterface> getOrigins();
     @Nullable
     public abstract SymbolInterface byName(String name);
+    @Nullable
+    public abstract SymbolInterface byId(int id);
     @NonNull
     public abstract SymbolInterface getRandomSymbol(Random random);
     @NonNull
