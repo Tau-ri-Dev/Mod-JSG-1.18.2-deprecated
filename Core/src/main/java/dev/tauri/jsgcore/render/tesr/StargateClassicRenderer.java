@@ -20,15 +20,16 @@ public abstract class StargateClassicRenderer<S extends StargateClassicRendererS
     public void render(@NotNull StargateAbstractBaseTile e, float renderTicks, @NotNull PoseStack stack, @NotNull MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
         StargateClassicBaseTile baseTile = (StargateClassicBaseTile) e;
         super.render(e, renderTicks, stack, bufferSource, combinedLight, combinedOverlay);
-        renderIris(baseTile, renderTicks);
+        renderIris(baseTile, renderTicks, stack, bufferSource);
     }
 
-    public void renderChevrons(StargateAbstractBaseTile e, float renderTicks){
+    @Override
+    public void renderChevrons(StargateAbstractBaseTile e, float renderTicks, PoseStack stack, MultiBufferSource bufferSource){
         @SuppressWarnings("unchecked") S rendererState = (S) e.getRendererStateClient();
         if(rendererState != null) {
             //rendererState.chevronTextureList.iterate(Objects.requireNonNull(e.getLevel()), renderTicks);
         }
     }
 
-    public abstract void renderIris(StargateAbstractBaseTile e, float renderTicks);
+    public abstract void renderIris(StargateAbstractBaseTile e, float renderTicks, PoseStack stack, MultiBufferSource bufferSource);
 }

@@ -3,7 +3,9 @@ package dev.tauri.jsgcore.loader.texture;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.TextureUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -17,7 +19,9 @@ import java.nio.IntBuffer;
 
 @OnlyIn(Dist.CLIENT)
 public class Texture extends AbstractTexture {
-	public Texture(BufferedImage bufferedImage) {
+	private final ResourceLocation resourceLocation;
+	public Texture(BufferedImage bufferedImage, ResourceLocation resourceLocation) {
+		this.resourceLocation = resourceLocation;
 		if (!RenderSystem.isOnRenderThread()) {
 			RenderSystem.recordRenderCall(() -> {
 				uploadTextureImageAllocate(getId(), bufferedImage);
@@ -34,7 +38,11 @@ public class Texture extends AbstractTexture {
 	}
 
 	public void bindTexture() {
-		bind();
+		RenderSystem.enableTexture();
+		RenderSystem.enableBlend();
+		RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderTexture(this.id, resourceLocation);
 	}
 
 	@Override

@@ -38,7 +38,7 @@ public class ModelLoader {
 			for (String modelPath : modelPaths) {
 				Logging.info("Loading model: " + modelPath + " for domain " + modId);
 				String modelResourcePath = modelPath.replaceFirst("assets/" + modId + "/", "");
-				LOADED_MODELS.put(new ResourceLocation(modId, modelResourcePath), OBJLoader.loadModel(modelPath));
+				LOADED_MODELS.put(new ResourceLocation(modId, modelResourcePath), OBJLoader.loadModel(modelPath, modMainClass));
 				Logging.info("Model " + modelPath + " for domain " + modId + " loaded!");
 			}
 

@@ -1,13 +1,9 @@
 package dev.tauri.jsgcore.loader.texture;
 
-import com.mojang.blaze3d.platform.NativeImage;
-import com.mojang.blaze3d.platform.TextureUtil;
 import dev.tauri.jsgcore.loader.FolderLoader;
 import dev.tauri.jsgcore.utils.Logging;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
-import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
@@ -62,6 +58,17 @@ public class TextureLoader {
 			for (String texturePath : texturePaths) {
 				texturePath = texturePath.replaceFirst("assets/" + modId + "/", "");
 
+				switch(texturePath){
+					default:
+						break;
+					case "textures/tesr/stargate/horizon/event_horizon_animated_kawoosh.jpg":
+					case "textures/tesr/stargate/horizon/event_horizon_animated_kawoosh_unstable.jpg":
+					case "textures/tesr/stargate/horizon/event_horizon_animated_unstable.jpg":
+					case "textures/tesr/stargate/horizon/event_horizon_animated.jpg":
+						Logging.info("Skipping texture " + texturePath + " for domain " + modId);
+						continue;
+				}
+
 				ResourceLocation resourceLocation = new ResourceLocation(modId, texturePath);
 				Resource resource = null;
 
@@ -69,7 +76,7 @@ public class TextureLoader {
 					Logging.info("Loading texture: " + texturePath + " for domain " + modId);
 					resource = resourceManager.getResource(resourceLocation);
 					BufferedImage bufferedImage = readBufferedImage(resource.getInputStream());
-					LOADED_TEXTURES.put(resourceLocation, new Texture(bufferedImage));
+					LOADED_TEXTURES.put(resourceLocation, new Texture(bufferedImage, resourceLocation));
 					Logging.info("Texture " + texturePath + " for domain " + modId + " loaded!");
 				} catch (IOException e) {
 					Logging.error("Failed to load texture " + texturePath);

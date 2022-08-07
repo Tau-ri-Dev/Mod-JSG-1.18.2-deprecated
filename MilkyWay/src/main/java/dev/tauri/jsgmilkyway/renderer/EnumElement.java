@@ -41,9 +41,7 @@ public enum EnumElement {
     }
 
     public void render() {
-        Logging.info(model.toString());
-        MODEL_LOADER.getModel(model).render(); //todo(Mine): fix this shit - minecraft 1.18.2 makes this:
-        // FATAL ERROR in native method: Thread[Render thread,10,main]: No context is current or a function that is not available in the current context was called. The JVM will abort execution.
+        MODEL_LOADER.getModel(model).render();
     }
 
     public void bindTexture(BiomeOverlayEnum biomeOverlay) {

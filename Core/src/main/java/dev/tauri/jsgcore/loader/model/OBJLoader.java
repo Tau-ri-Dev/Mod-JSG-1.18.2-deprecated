@@ -6,14 +6,11 @@ import dev.tauri.jsgcore.utils.vectors.Vector3f;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class OBJLoader {
 	
-	public static OBJModel loadModel(String modelPath) {
+	public static OBJModel loadModel(String modelPath, Class clazz) {
 		BufferedReader reader;
 		
 		List<Vector3f> vertices = new ArrayList<Vector3f>();
@@ -26,7 +23,7 @@ public class OBJLoader {
 	    int current = 0;
 	    
 		try {
-			reader = new BufferedReader(new InputStreamReader(JSGCore.class.getClassLoader().getResourceAsStream(modelPath)));
+			reader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(clazz.getClassLoader().getResourceAsStream(modelPath))));
 		    String line;
 		    
 			while ( (line = reader.readLine()) != null ) {
@@ -76,6 +73,8 @@ public class OBJLoader {
 		// ----------------------------------------------------------------------------------
 		
 		boolean hasTex = textures.size() > 0;
+
+		final List<OBJCord> cords = new ArrayList<>();
 		
 		int size = vertexIndexMap.size();
 		int index = 0;
@@ -96,13 +95,16 @@ public class OBJLoader {
 			n[ index*3    ] = norm.x;
 			n[ index*3 + 1] = norm.y;
 			n[ index*3 + 2] = norm.z;
-			
+
 			if (hasTex) {
 				Vector2f tex = textures.get( key.tId );
 
 				t[ index*2    ] = tex.x;
 				t[ index*2 + 1] = -tex.y;
+				cords.add(new OBJCord(ver.x, ver.y, ver.z, norm.x, norm.y, norm.z, tex.x, -tex.y));
 			}
+			else
+				cords.add(new OBJCord(ver.x, ver.y, ver.z, norm.x, norm.y, norm.z));
 			
 			index++;
 		}
@@ -110,10 +112,11 @@ public class OBJLoader {
 		int[] ind = new int[ indices.size() ];
 		
 		for (int k=0; k<indices.size(); k++) {
-			ind[k] = indices.get(k).intValue();
+			ind[k] = indices.get(k);
 		}
 
-		return new OBJModel(v, t, n, ind, hasTex);
+		//return new OBJModel(v, t, n, ind, hasTex);
+		return new OBJModel(cords, hasTex);
 	}
 	
 	private static class Vertex {

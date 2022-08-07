@@ -75,9 +75,11 @@ minecraft {
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 repositories {
+    mavenCentral()
 }
 dependencies {
     minecraft 'net.minecraftforge:forge:1.18.2-40.1.0'
+    //compileOnly 'org.lwjgl.lwjgl:lwjgl:2.9.3'
 }
 
 jar {

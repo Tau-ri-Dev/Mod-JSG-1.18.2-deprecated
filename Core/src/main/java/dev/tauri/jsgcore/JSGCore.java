@@ -2,38 +2,24 @@ package dev.tauri.jsgcore;
 
 import dev.tauri.jsgcore.commands.InfoCommand;
 import dev.tauri.jsgcore.commands.TestCommand;
-import dev.tauri.jsgcore.config.AbstractConfigFile;
 import dev.tauri.jsgcore.loader.model.ModelLoader;
 import dev.tauri.jsgcore.loader.texture.TextureLoader;
 import dev.tauri.jsgcore.registry.CommandRegistry;
 import dev.tauri.jsgcore.screen.ScreenRegistry;
-import dev.tauri.jsgcore.screen.ScreenTypes;
-import dev.tauri.jsgcore.screen.stargate.StargateScreen;
 import dev.tauri.jsgcore.stargate.network.StargateNetworkFile;
 import dev.tauri.jsgcore.utils.Logging;
 import dev.tauri.jsgcore.utils.ModLoading;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLLoader;
-import net.minecraftforge.fml.loading.moddiscovery.ModInfo;
-
-import java.util.List;
-
-import static dev.tauri.jsgcore.config.JSGConfigStorage.configFiles;
 
 @Mod(JSGCore.MOD_ID)
 public class JSGCore{
