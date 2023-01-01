@@ -6,12 +6,16 @@ import dev.tauri.jsgcore.config.files.JSGServerConfig;
 import dev.tauri.jsgcore.screen.ScreenTypes;
 import dev.tauri.jsgcore.screen.stargate.StargateScreen;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.fml.loading.moddiscovery.ModInfo;
+import org.lwjgl.glfw.GLFWWindowFocusCallback;
+import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL32;
 
 import java.util.List;
 

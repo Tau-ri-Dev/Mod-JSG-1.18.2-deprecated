@@ -3,8 +3,10 @@ package dev.tauri.jsgcore.loader.texture;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.TextureUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraftforge.api.distmarker.Dist;
@@ -43,6 +45,8 @@ public class Texture extends AbstractTexture {
 		RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderSystem.setShaderTexture(this.id, resourceLocation);
+		//GlStateManager._bindTexture(getId());
+		//Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(resourceLocation);
 	}
 
 	@Override
