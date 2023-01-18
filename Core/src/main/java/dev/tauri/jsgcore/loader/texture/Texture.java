@@ -45,7 +45,7 @@ public class Texture extends AbstractTexture {
 		RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderSystem.setShaderTexture(this.id, resourceLocation);
-		//GlStateManager._bindTexture(getId());
+		GlStateManager._bindTexture(getId());
 		//Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(resourceLocation);
 	}
 

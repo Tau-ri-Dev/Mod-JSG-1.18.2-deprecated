@@ -1,116 +1,117 @@
 package dev.tauri.jsgcore.loader.model;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
+import dev.tauri.jsgcore.utils.vectors.Vector2f;
+import dev.tauri.jsgcore.utils.vectors.Vector3f;
+import org.lwjgl.opengl.GL32;
 
-import java.nio.Buffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-import static org.lwjgl.opengl.GL46.*;
+import static org.lwjgl.opengl.GL32.GL_FLAT;
+import static org.lwjgl.opengl.GL32.GL_SMOOTH;
 
 public class OBJModel {
+    private final List<Vector3f> vertices;
+    private final List<Vector2f> textureCoords;
+    private final List<Vector3f> normals;
+    private final List<Face> faces;
+    private boolean enableSmoothShading;
 
-    private int drawCount;
-    private boolean modelInitialized;
+    public void render() {
+        OBJLoader.render(this);
+    }
 
-    private int vId;
-    private int tId;
-    private int nId;
-    private int iId;
-    private final boolean hasTex;
-
-    private final float[] vertices;
-    private final float[] textureCoords;
-    private final float[] normals;
-    private final int[] indices;
-
-
-    public OBJModel(float[] vertices, float[] textureCoords, float[] normals, int[] indices, boolean hasTex) {
+    public OBJModel(List<Vector3f> vertices, List<Vector2f> textureCoords, List<Vector3f> normals, List<Face> faces, boolean enableSmoothShading) {
         this.vertices = vertices;
         this.textureCoords = textureCoords;
         this.normals = normals;
-        this.indices = indices;
-        this.hasTex = hasTex;
-
-        modelInitialized = false;
+        this.faces = faces;
+        this.enableSmoothShading = enableSmoothShading;
     }
 
-    public void initializeModel() {
-        drawCount = indices.length;
+    public OBJModel() {
+        this(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), true);
+    }
 
-        vId = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, vId);
-        glBufferData(GL_ARRAY_BUFFER, createFloatBuffer(vertices), GL_STATIC_DRAW);
+    public void enableStates() {
+        if (this.isSmoothShadingEnabled()) {
+            GL32.glShadeModel(GL_SMOOTH);
+        } else {
+            GL32.glShadeModel(GL_FLAT);
+        }
+    }
 
-        if (hasTex) {
-            tId = glGenBuffers();
-            glBindBuffer(GL_ARRAY_BUFFER, tId);
-            glBufferData(GL_ARRAY_BUFFER, createFloatBuffer(textureCoords), GL_STATIC_DRAW);
+    public boolean hasTextureCoordinates() {
+        return this.getTextureCoordinates().size() > 0;
+    }
+
+    public boolean hasNormals() {
+        return this.getNormals().size() > 0;
+    }
+
+    public List<Vector3f> getVertices() {
+        return this.vertices;
+    }
+
+    public List<Vector2f> getTextureCoordinates() {
+        return this.textureCoords;
+    }
+
+    public List<Vector3f> getNormals() {
+        return this.normals;
+    }
+
+    public List<Face> getFaces() {
+        return this.faces;
+    }
+
+    public boolean isSmoothShadingEnabled() {
+        return this.enableSmoothShading;
+    }
+
+    public void setSmoothShadingEnabled(boolean isSmoothShadingEnabled) {
+        this.enableSmoothShading = isSmoothShadingEnabled;
+    }
+
+    public static class Face {
+
+        private final int[] vertexIndices;
+        private final int[] normalIndices;
+        private final int[] textureCoordinateIndices;
+
+        public boolean hasNormals() {
+            return this.normalIndices != null;
         }
 
-        nId = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, nId);
-        glBufferData(GL_ARRAY_BUFFER, createFloatBuffer(normals), GL_STATIC_DRAW);
-
-        iId = glGenBuffers();
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iId);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, createIntBuffer(indices), GL_STATIC_DRAW);
-
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-        modelInitialized = true;
-    }
-
-    public void render() {
-        if (!modelInitialized)
-            initializeModel();
-
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glEnableClientState(GL_NORMAL_ARRAY);
-        if (hasTex) glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-        glBindBuffer(GL_ARRAY_BUFFER, vId);
-        glVertexAttribPointer(vId, 3, GL_FLOAT, false, 3 * Float.SIZE, 0);
-        glEnableVertexAttribArray(vId);
-
-        if (hasTex) {
-            glBindBuffer(GL_ARRAY_BUFFER, tId);
-            glVertexAttribPointer(tId, 2, GL_FLOAT, false, 2 * Float.SIZE, 0);
-            glEnableVertexAttribArray(tId);
-            //glTexCoordPointer(2, GL_FLOAT, 0, 0);
+        public boolean hasTextureCoords() {
+            return this.textureCoordinateIndices != null;
         }
 
-        glBindBuffer(GL_ARRAY_BUFFER, nId);
-        glVertexAttribPointer(nId, 1, GL_FLOAT, false, Float.SIZE, 0);
-        glEnableVertexAttribArray(nId);
-        //glNormalPointer(GL_FLOAT, 0, 0);
+        public int[] getVertices() {
+            return this.vertexIndices;
+        }
 
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iId);
-        RenderSystem.drawElements(GL_TRIANGLES, drawCount, GL_UNSIGNED_INT);
-        //glDrawElements(GL_TRIANGLES, drawCount, GL_UNSIGNED_INT, 0);
+        public int[] getTextureCoords() {
+            return this.textureCoordinateIndices;
+        }
 
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        public int[] getNormals() {
+            return this.normalIndices;
+        }
 
-        glDisableClientState(GL_VERTEX_ARRAY);
-        glDisableClientState(GL_NORMAL_ARRAY);
-        if (hasTex) glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    }
+        public Face(int[] vertexIndices, int[] textureCoordinateIndices, int[] normalIndices) {
+            super();
 
-    private FloatBuffer createFloatBuffer(float[] input) {
-        FloatBuffer buffer = BufferUtils.createFloatBuffer(input.length);
-        ((Buffer) buffer.put(input)).flip();
+            this.vertexIndices = vertexIndices;
+            this.normalIndices = normalIndices;
+            this.textureCoordinateIndices = textureCoordinateIndices;
+        }
 
-        return buffer;
-    }
-
-    private IntBuffer createIntBuffer(int[] input) {
-        IntBuffer buffer = BufferUtils.createIntBuffer(input.length);
-        ((Buffer) buffer.put(input)).flip();
-
-        return buffer;
+        @Override
+        public String toString() {
+            return String.format("Face[vertexIndices%s normalIndices%s textureCoordinateIndices%s]",
+                    Arrays.toString(vertexIndices), Arrays.toString(normalIndices), Arrays.toString(textureCoordinateIndices));
+        }
     }
 }

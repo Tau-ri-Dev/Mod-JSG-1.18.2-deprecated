@@ -6,7 +6,6 @@ import dev.tauri.jsgcore.render.ChevronEnum;
 import dev.tauri.jsgcore.render.tesr.StargateClassicRenderer;
 import dev.tauri.jsgcore.tileentity.StargateAbstractBaseTile;
 import dev.tauri.jsgcore.utils.BiomeOverlayEnum;
-import dev.tauri.jsgcore.utils.FacingToRotation;
 import dev.tauri.jsgmilkyway.renderer.EnumElement;
 import dev.tauri.jsgmilkyway.renderer.state.StargateMilkyWayRendererState;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -33,9 +32,9 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
 
         float chevronTranslation = 0;
 
-        for(ChevronEnum chevron : ChevronEnum.values()) {
+        for (ChevronEnum chevron : ChevronEnum.values()) {
 
-            if(chevron.index == 9) chevronTranslation = 1f;
+            if (chevron.index == 9) chevronTranslation = 1f;
             stack.pushPose();
             stack.mulPose(new Quaternion(chevron.rotation, 0, 0, true));
             EnumElement.STARGATE_CHEVRON_BACK.bindTextureAndRender(overlay);
@@ -52,7 +51,7 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
 
 
         StargateMilkyWayRendererState rendererState = (StargateMilkyWayRendererState) stargateAbstractBaseTile.getRendererStateClient();
-        if(rendererState != null) {
+        if (rendererState != null) {
             rendererState.chevronTextureList.iterate(Objects.requireNonNull(stargateAbstractBaseTile.getLevel()), v);
         }
     }
