@@ -1,7 +1,10 @@
 package dev.tauri.jsgmilkyway.renderer;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import dev.tauri.jsgcore.utils.BiomeOverlayEnum;
+import dev.tauri.jsgmilkyway.JSGMilkyWay;
 import dev.tauri.jsgmilkyway.utils.Logging;
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
@@ -40,8 +43,8 @@ public enum EnumElement {
         }
     }
 
-    public void render() {
-        MODEL_LOADER.getModel(model).render();
+    public void render(PoseStack ps) {
+        MODEL_LOADER.getModel(model).render(ps);
     }
 
     public void bindTexture(BiomeOverlayEnum biomeOverlay) {
@@ -50,6 +53,8 @@ public enum EnumElement {
     }
 
     public void bindTexture(BiomeOverlayEnum biomeOverlay, ResourceLocation resourceLocation) {
+        Minecraft.getInstance().getTextureManager().getTexture(resourceLocation).bind();
+
         if (!TEXTURE_LOADER.isTextureLoaded(resourceLocation)) {
             if (!nonExistingReported.contains(biomeOverlay)) {
                 Logging.error(this + " tried to use BiomeOverlay " + biomeOverlay + " but it doesn't exist. (" + resourceLocation + ")");
@@ -61,8 +66,8 @@ public enum EnumElement {
         TEXTURE_LOADER.getTexture(resourceLocation).bindTexture();
     }
 
-    public void bindTextureAndRender(BiomeOverlayEnum biomeOverlay) {
+    public void bindTextureAndRender(BiomeOverlayEnum biomeOverlay, PoseStack ps) {
         bindTexture(biomeOverlay);
-        render();
+        render(ps);
     }
 }

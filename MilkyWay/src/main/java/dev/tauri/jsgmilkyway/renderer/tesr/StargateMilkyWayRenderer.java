@@ -23,7 +23,7 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
 
     @Override
     public void renderGate(StargateAbstractBaseTile stargateAbstractBaseTile, float v, PoseStack stack, MultiBufferSource bufferSource) {
-        EnumElement.STARGATE_GATE.bindTextureAndRender(BiomeOverlayEnum.NORMAL);
+        EnumElement.STARGATE_GATE.bindTextureAndRender(BiomeOverlayEnum.NORMAL, stack);
     }
 
     @Override
@@ -37,13 +37,13 @@ public class StargateMilkyWayRenderer extends StargateClassicRenderer<StargateMi
             if (chevron.index == 9) chevronTranslation = 1f;
             stack.pushPose();
             stack.mulPose(new Quaternion(chevron.rotation, 0, 0, true));
-            EnumElement.STARGATE_CHEVRON_BACK.bindTextureAndRender(overlay);
-            EnumElement.STARGATE_CHEVRON_LIGHT.bindTextureAndRender(overlay);
-            EnumElement.STARGATE_CHEVRON_FRAME.bindTextureAndRender(overlay);
+            EnumElement.STARGATE_CHEVRON_BACK.bindTextureAndRender(overlay, stack);
+            EnumElement.STARGATE_CHEVRON_LIGHT.bindTextureAndRender(overlay, stack);
+            EnumElement.STARGATE_CHEVRON_FRAME.bindTextureAndRender(overlay, stack);
 
             stack.pushPose();
             stack.translate(0, chevronTranslation, 0);
-            EnumElement.STARGATE_CHEVRON_MOVING.bindTextureAndRender(overlay);
+            EnumElement.STARGATE_CHEVRON_MOVING.bindTextureAndRender(overlay, stack);
             stack.popPose();
 
             stack.popPose();

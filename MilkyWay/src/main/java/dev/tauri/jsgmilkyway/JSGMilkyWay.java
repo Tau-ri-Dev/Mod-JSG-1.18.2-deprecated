@@ -25,7 +25,11 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.util.LoaderException;
+import net.minecraftforge.fml.util.LoaderExceptionModCrash;
 import org.slf4j.Logger;
+
+import javax.security.auth.login.LoginException;
 
 import static dev.tauri.jsgmilkyway.utils.corenetwork.CoreChecker.isCoreInstalled;
 
@@ -48,12 +52,11 @@ public class JSGMilkyWay {
 
     public static final CommandRegistry COMMAND_REGISTRY = new CommandRegistry();
 
-    public JSGMilkyWay() {
+    public JSGMilkyWay() throws LoaderException {
         if (!isCoreInstalled()) {
             Logging.error("Error while loading!");
             Logging.error("Missing: JSG: Core mod!");
-            Minecraft.getInstance().close();
-            return;
+            throw new LoaderException("Error while loading! Missing: JSG: Core mod!");
         }
 
         IEventBus eb = FMLJavaModLoadingContext.get().getModEventBus();

@@ -74,17 +74,12 @@ sourceSets.main.resources { srcDir 'src/main/resources' }
 
 repositories {
     mavenCentral()
-    maven {
-        name = "Core"
-        url = "https://files.justsgmod.eu/test/"
-        allowInsecureProtocol = true
-    }
 }
 dependencies {
 
     minecraft 'net.minecraftforge:forge:1.18.2-40.1.0'
 
-    compileOnly "${jsg_core}"
+    compileOnly files("C:\\Users\\Admin\\Documents\\GitHub\\JSGMod-1.18.2\\deps\\${jsg_core}")
     //compileOnly 'org.lwjgl.lwjgl:lwjgl:2.9.3'
 }
 

@@ -1,5 +1,6 @@
 package dev.tauri.jsgcore.loader.model;
 
+import dev.tauri.jsgcore.JSGCore;
 import dev.tauri.jsgcore.loader.FolderLoader;
 import dev.tauri.jsgcore.utils.Logging;
 import net.minecraft.resources.ResourceLocation;
@@ -23,6 +24,7 @@ public class ModelLoader {
 	}
 	
 	public OBJModel getModel(ResourceLocation resourceLocation) {
+		Logging.info(resourceLocation.toString());
 		return LOADED_MODELS.get(resourceLocation);
 	}
 

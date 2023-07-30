@@ -12,7 +12,7 @@ import java.util.jar.JarFile;
 
 public class FolderLoader {
 
-  public static List<String> getAllFiles(Class clazz, String path, String... suffixes) throws IOException {
+  public static List<String> getAllFiles(Class<?> clazz, String path, String... suffixes) throws IOException {
     List<String> out = new ArrayList<>();
 
     String classPath = clazz.getProtectionDomain().getCodeSource().getLocation().getPath();
